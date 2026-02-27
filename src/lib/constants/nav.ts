@@ -17,7 +17,10 @@ const operationsSection = {
 const storesSection = {
   label: "Stores",
   items: [
-    { label: "Dashboard", href: routes.storesDashboard, icon: "LayoutDashboard" }
+    { label: "Dashboard", href: routes.storesDashboard, icon: "LayoutDashboard" },
+    { label: "Work Queue", href: routes.storesWorkQueue, icon: "List" },
+    { label: "Inventory", href: routes.storesInventory, icon: "Database" },
+    { label: "Reports", href: routes.storesReports, icon: "ClipboardCheck" }
   ]
 };
 
