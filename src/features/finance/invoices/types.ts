@@ -1,0 +1,52 @@
+export type InvoiceStatus = "PENDING" | "MATCHED" | "DISPUTED" | "APPROVED" | "PAYMENT_PROCESSING" | "PAID" | "REJECTED" | "CANCELLED";
+
+export type InvoiceLineItem = {
+  id?: string;
+  supplierInvoiceId?: string | null;
+  poLineItemId?: string | null;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  lineTotal?: number | null;
+  priceVariance?: number | null;
+  quantityVariance?: number | null;
+  matched?: boolean | null;
+  matchNotes?: string | null;
+  unitOfMeasure?: string | null;
+  notes?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};
+
+export type SupplierInvoice = {
+  id?: string;
+  invoiceNumber: string;
+  vendorId: string;
+  purchaseOrderId?: string | null;
+  status?: InvoiceStatus;
+  invoiceDate?: string;
+  dueDate?: string | null;
+  invoiceAmount: number;
+  taxAmount?: number | null;
+  totalAmount?: number | null;
+  retainageAmount?: number | null;
+  retainagePercentage?: number | null;
+  netPayable?: number | null;
+  paidAmount?: number | null;
+  outstandingAmount?: number | null;
+  paymentTerms?: string | null;
+  description?: string | null;
+  notes?: string | null;
+  documentPath?: string | null;
+  receivedBy: string;
+  approvedBy?: string | null;
+  approvedAt?: string | null;
+  paidBy?: string | null;
+  paidAt?: string | null;
+  paymentReference?: string | null;
+  isOverdue?: boolean | null;
+  daysUntilDue?: number | null;
+  lineItems?: InvoiceLineItem[];
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};

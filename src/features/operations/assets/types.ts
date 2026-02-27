@@ -1,0 +1,54 @@
+export type AssetStatus = "ACTIVE" | "UNDER_REPAIR" | "DECOMMISSIONED";
+export type AssetCategory = "HEAVY_EQUIPMENT" | "SMALL_EQUIPMENT" | "TOOLS" | "VEHICLES";
+export type LegacyAssetCategory = "VEHICLE" | "PLANT" | "TOOL" | "OTHER";
+export type AssetOwnership = "OWNED" | "LEASED" | "RENTED";
+export type AssetCondition = "GOOD" | "FAIR" | "POOR";
+export type AssetAvailability = "AVAILABLE" | "IN_USE" | "MAINTENANCE";
+export type AssetMediaType = "PHOTO" | "VIDEO" | "DOCUMENT" | "OTHER";
+
+export type Asset = {
+  id?: string;
+  assetCode: string;
+  type?: string | null;
+  telematicsId?: string | null;
+  status?: AssetStatus | null;
+  currentLocationWkt?: string | null;
+  category?: AssetCategory | LegacyAssetCategory | null;
+  availability?: AssetAvailability | null;
+  make?: string | null;
+  model?: string | null;
+  year?: number | null;
+  serialNumber?: string | null;
+  vin?: string | null;
+  ownership?: AssetOwnership | null;
+  purchaseDate?: string | null;
+  purchaseCost?: number | null;
+  supplierId?: string | null;
+  assignedProjectId?: string | null;
+  assignedProjectName?: string | null;
+  allocationStartDate?: string | null;
+  allocationEndDate?: string | null;
+  personInChargeId?: string | null;
+  personInChargeName?: string | null;
+  operatorId?: string | null;
+  rentalStartDate?: string | null;
+  rentalEndDate?: string | null;
+  engineHours?: number | null;
+  lastServiceDate?: string | null;
+  nextServiceDate?: string | null;
+  serviceIntervalHours?: number | null;
+  condition?: AssetCondition | null;
+  utilizationPercent?: number | null;
+  notes?: string | null;
+};
+
+export type AssetMedia = {
+  id?: string;
+  assetId: string;
+  mediaUrl: string;
+  description?: string | null;
+  mediaType: AssetMediaType;
+  capturedAt?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+};

@@ -1,0 +1,1 @@
+export type Role = "OPERATIONS_DIRECTOR" | "FINANCE" | "SITE_MANAGER" | "STORES";
