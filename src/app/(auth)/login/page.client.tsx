@@ -8,7 +8,7 @@ import { ENV } from "@/lib/config/env";
 import { useAuth } from "@/providers/auth-provider";
 import { useToast } from "@/components/ui/toast";
 import { getDefaultRouteForRole, isRouteAllowed } from "@/lib/auth/access-control";
-import { resolveRoleFromCredentials } from "@/lib/auth/credential-role";
+import { resolveRoleFromCredentials, resolveRoleFromUsername } from "@/lib/auth/credential-role";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,29 +36,50 @@ export default function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const resolvedRole = resolveRoleFromCredentials(formState.username.trim(), formState.password);
+      const username = formState.username.trim();
+      const password = formState.password;
+      const resolvedRole = resolveRoleFromUsername(username);
       if (!resolvedRole) {
-        throw new Error("Role mismatch");
+        throw new Error("Login failed. Unknown username.");
       }
-      if (!ENV.useMockApi) {
-        const base = ENV.apiBaseUrl;
+      if (ENV.useMockApi) {
+        const mockRole = resolveRoleFromCredentials(username, password);
+        if (!mockRole) {
+          throw new Error("Login failed. Invalid credentials.");
+        }
+      } else {
+        const base = ENV.apiBaseUrl.trim();
+        if (!base) {
+          throw new Error("Login failed. API base URL is not configured.");
+        }
+
         const response = await fetch(`${base}/api/v1/projects`, {
           headers: {
-            Authorization: `Basic ${encodeBasicAuth(formState.username, formState.password)}`
-          }
+            Authorization: `Basic ${encodeBasicAuth(username, password)}`
+          },
+          cache: "no-store"
         });
         if (!response.ok) {
-          throw new Error("Invalid credentials");
+          if (response.status === 401) {
+            throw new Error("Login failed. Invalid username or password.");
+          }
+          if (response.status === 403) {
+            throw new Error("Login failed. Access denied by backend.");
+          }
+          if (response.status === 404) {
+            throw new Error("Login failed. Backend endpoint not found.");
+          }
+          throw new Error(`Login failed. Backend returned ${response.status}.`);
         }
       }
-      setCredentials(formState.username, formState.password, resolvedRole);
+      setCredentials(username, password, resolvedRole);
       notify({ message: "Signed in successfully", tone: "success" });
       const next = params.get("next");
       const fallback = getDefaultRouteForRole(resolvedRole);
       const destination = next && isRouteAllowed(resolvedRole, next) ? next : fallback;
       router.replace(destination);
     } catch (err: unknown) {
-      setError("Login failed. Credentials do not match an authorized role.");
+      setError(err instanceof Error ? err.message : "Login failed.");
     } finally {
       setIsSubmitting(false);
     }

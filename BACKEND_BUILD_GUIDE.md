@@ -109,7 +109,7 @@ Suggested env vars:
 ```env
 PORT=8080
 CORS_ORIGIN=http://localhost:3000
-BASIC_AUTH_USERS=admin:admin123,sitemanager:site123
+BASIC_AUTH_USERS=admin:admin,finance:finance,sitemanager:sitemanager,stores:stores
 DB_FILE=src/db/data.json
 ```
 
