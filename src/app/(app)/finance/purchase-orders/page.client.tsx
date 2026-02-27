@@ -282,8 +282,10 @@ export default function PurchaseOrdersPage() {
       ) : displayItems.length === 0 ? (
         <EmptyState title="No purchase orders" description="Create a purchase order to get started." />
       ) : (
-        <Table>
-          <TableRoot ref={tableRef}>
+        <>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot ref={tableRef}>
             <thead>
               <tr>
                 <th>PO Number</th>
@@ -334,9 +336,50 @@ export default function PurchaseOrdersPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </TableRoot>
-        </Table>
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {displayItems.map((po) => (
+              <article key={`mobile-${po.id ?? po.poNumber}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">
+                      <HighlightText text={po.poNumber ?? "-"} query={highlightQuery} />
+                    </p>
+                    <p className="mobile-card-subtitle">
+                      <HighlightText text={po.projectId ?? "-"} query={highlightQuery} />
+                    </p>
+                  </div>
+                  <Badge label={po.status ?? "DRAFT"} tone={getStatusTone(po.status ?? "DRAFT")} />
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Vendor</span>
+                    <div className="mobile-value">
+                      <HighlightText text={po.vendorId ?? "-"} query={highlightQuery} />
+                    </div>
+                  </div>
+                </div>
+                <div className="mobile-card-actions">
+                  <Button variant="ghost" onClick={() => po.id && router.push(`/finance/purchase-orders/${po.id}`)}>View -&gt;</Button>
+                  {canEdit ? (
+                    <RowActions
+                      actions={[
+                        { label: "Submit", onClick: () => actions.submit.mutate(po.id!) },
+                        { label: "Approve", onClick: () => actions.approve.mutate({ id: po.id!, approvedBy: po.createdBy }) },
+                        { label: "Cancel", onClick: () => actions.cancel.mutate(po.id!), tone: "destructive" },
+                        { label: "Close", onClick: () => actions.close.mutate(po.id!) },
+                        { label: "Delete", onClick: () => { setSelected(po); setShowConfirm(true); }, tone: "destructive" }
+                      ]}
+                    />
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
 
       <PurchaseOrderForm

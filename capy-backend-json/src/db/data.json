@@ -1,0 +1,861 @@
+{
+  "projects": [
+    {
+      "id": "proj-001",
+      "name": "Office Renovation",
+      "status": "ACTIVE",
+      "geofenceWkt": "POLYGON((30.0 -1.0, 30.1 -1.0, 30.1 -1.1, 30.0 -1.1, 30.0 -1.0))",
+      "budgetId": "2400000",
+      "locationName": "CBD Office Park",
+      "address": "12 Main St, Harare",
+      "clientName": "Acme Holdings",
+      "projectCode": "PRJ-001",
+      "startDate": "2026-01-15",
+      "endDate": "2026-08-30",
+      "actualStartDate": "2026-01-20",
+      "health": "GREEN",
+      "stage": "EXECUTION",
+      "percentComplete": 42,
+      "siteManagerId": "staff-002",
+      "siteManagerName": "Jordan Site",
+      "autoClockoutTime": "17:00",
+      "shiftStartTime": "07:30",
+      "shiftEndTime": "17:00",
+      "gracePeriodMinutes": 15,
+      "overtimeAllowed": true,
+      "overtimeMaxHours": 2,
+      "description": "Interior renovations and MEP upgrades."
+    },
+    {
+      "id": "proj-002",
+      "name": "Bridge Expansion",
+      "status": "PENDING",
+      "geofenceWkt": "POLYGON((30.2 -1.2, 30.3 -1.2, 30.3 -1.3, 30.2 -1.3, 30.2 -1.2))",
+      "budgetId": "1750000",
+      "locationName": "North Corridor",
+      "address": "A7 Highway Km 42",
+      "clientName": "City Works",
+      "projectCode": "PRJ-002",
+      "startDate": "2026-03-01",
+      "endDate": "2026-12-15",
+      "health": "AMBER",
+      "stage": "PLANNING",
+      "percentComplete": 12,
+      "siteManagerId": "staff-003",
+      "siteManagerName": "Sam Supervisor",
+      "autoClockoutTime": "17:30",
+      "shiftStartTime": "07:00",
+      "shiftEndTime": "17:30",
+      "gracePeriodMinutes": 10,
+      "overtimeAllowed": true,
+      "overtimeMaxHours": 3,
+      "description": "Widening and reinforcing bridge deck."
+    },
+    {
+      "id": "proj-003",
+      "name": "Warehouse Upgrade",
+      "status": "ARCHIVED",
+      "geofenceWkt": null,
+      "budgetId": "980000",
+      "locationName": "Industrial Zone",
+      "address": "Lot 19, Industrial Zone",
+      "clientName": "LogiWorks",
+      "projectCode": "PRJ-003",
+      "startDate": "2025-05-10",
+      "endDate": "2025-11-20",
+      "actualStartDate": "2025-05-12",
+      "actualEndDate": "2025-11-10",
+      "health": "GREEN",
+      "stage": "CLOSEOUT",
+      "percentComplete": 100,
+      "siteManagerId": "staff-001",
+      "siteManagerName": "Alice Manager",
+      "autoClockoutTime": "17:00",
+      "shiftStartTime": "07:00",
+      "shiftEndTime": "16:30",
+      "gracePeriodMinutes": 5,
+      "overtimeAllowed": false,
+      "overtimeMaxHours": 0,
+      "description": "Completed racking and safety upgrades."
+    }
+  ],
+  "staff": [
+    {
+      "id": "staff-001",
+      "fullName": "Alice Manager",
+      "nationalId": "MNG12345",
+      "role": "MANAGER"
+    },
+    {
+      "id": "staff-002",
+      "fullName": "Jordan Site",
+      "nationalId": "SUP54321",
+      "role": "SUPERVISOR"
+    },
+    {
+      "id": "staff-003",
+      "fullName": "Sam Supervisor",
+      "nationalId": "SUP67890",
+      "role": "SUPERVISOR"
+    },
+    {
+      "id": "staff-004",
+      "fullName": "Kuda Worker",
+      "nationalId": "WRK34567",
+      "role": "WORKER"
+    },
+    {
+      "id": "staff-005",
+      "fullName": "Rita Mason",
+      "nationalId": "WRK76543",
+      "role": "WORKER"
+    }
+  ],
+  "vendors": [
+    {
+      "id": "vendor-001",
+      "companyName": "Buildforce Supplies",
+      "type": "SUPPLIER",
+      "taxClearanceExpiry": "2026-12-31",
+      "performanceRating": 5
+    },
+    {
+      "id": "vendor-002",
+      "companyName": "ConcreteWorks Ltd",
+      "type": "SUBCONTRACTOR",
+      "taxClearanceExpiry": "2026-06-15",
+      "performanceRating": 4
+    }
+  ],
+  "assets": [
+    {
+      "id": "asset-001",
+      "assetCode": "EXC-100",
+      "type": "Excavator",
+      "category": "HEAVY_EQUIPMENT",
+      "status": "ACTIVE",
+      "availability": "IN_USE",
+      "telematicsId": "TEL-EXC-1",
+      "currentLocationWkt": null,
+      "make": "Caterpillar",
+      "model": "320D",
+      "year": 2019,
+      "serialNumber": "CAT320D-9821",
+      "vin": "CAT3EXC98210001",
+      "ownership": "OWNED",
+      "purchaseDate": "2020-02-10",
+      "purchaseCost": 180000,
+      "supplierId": "vendor-001",
+      "assignedProjectId": "proj-001",
+      "assignedProjectName": "Office Renovation",
+      "allocationStartDate": "2026-01-20",
+      "allocationEndDate": null,
+      "personInChargeId": "staff-002",
+      "personInChargeName": "Jordan Site",
+      "operatorId": "staff-002",
+      "rentalStartDate": null,
+      "rentalEndDate": null,
+      "engineHours": 1240,
+      "lastServiceDate": "2026-01-10",
+      "nextServiceDate": "2026-03-10",
+      "serviceIntervalHours": 250,
+      "condition": "GOOD",
+      "utilizationPercent": 78,
+      "notes": "Hydraulic inspection due next service."
+    },
+    {
+      "id": "asset-002",
+      "assetCode": "TRK-220",
+      "type": "Tipper Truck",
+      "category": "VEHICLES",
+      "status": "UNDER_REPAIR",
+      "availability": "MAINTENANCE",
+      "telematicsId": "TEL-TRK-2",
+      "currentLocationWkt": null,
+      "make": "Volvo",
+      "model": "FMX",
+      "year": 2017,
+      "serialNumber": "VOL-FMX-443",
+      "vin": "VOLFMX4430002",
+      "ownership": "RENTED",
+      "purchaseDate": "2019-07-01",
+      "purchaseCost": 90000,
+      "supplierId": "vendor-002",
+      "assignedProjectId": "proj-002",
+      "assignedProjectName": "Bridge Expansion",
+      "allocationStartDate": "2026-01-10",
+      "allocationEndDate": "2026-01-28",
+      "personInChargeId": "staff-003",
+      "personInChargeName": "Sam Supervisor",
+      "operatorId": "staff-003",
+      "rentalStartDate": "2026-01-01",
+      "rentalEndDate": "2026-04-30",
+      "engineHours": 2080,
+      "lastServiceDate": "2025-12-15",
+      "nextServiceDate": "2026-02-15",
+      "serviceIntervalHours": 300,
+      "condition": "FAIR",
+      "utilizationPercent": 52,
+      "notes": "In repair for brake system; awaiting parts."
+    }
+  ],
+  "assetMedia": [
+    {
+      "id": "am-001",
+      "assetId": "asset-001",
+      "mediaUrl": "https://example.com/media/assets/excavator-front.jpg",
+      "description": "Excavator front view",
+      "mediaType": "PHOTO",
+      "capturedAt": "2026-01-15T09:00:00",
+      "createdAt": "2026-01-15T09:00:00",
+      "updatedAt": "2026-01-15T09:00:00"
+    },
+    {
+      "id": "am-002",
+      "assetId": "asset-001",
+      "mediaUrl": "https://example.com/media/assets/excavator-service.pdf",
+      "description": "Service checklist",
+      "mediaType": "DOCUMENT",
+      "capturedAt": "2026-01-20T12:00:00",
+      "createdAt": "2026-01-20T12:00:00",
+      "updatedAt": "2026-01-20T12:00:00"
+    }
+  ],
+  "dailyLogs": [
+    {
+      "id": "dl-001",
+      "logType": "PROJECT",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "employeeId": null,
+      "employeeName": null,
+      "date": "2026-02-26",
+      "weather": "Clear",
+      "delayNotes": null,
+      "progressEntries": [
+        {
+          "id": "pe-001",
+          "scopeItemId": "scope-001",
+          "scopeItemBoqCode": "BOQ-100",
+          "quantityCompleted": 12
+        }
+      ],
+      "siteMedia": [
+        {
+          "id": "sm-001",
+          "mediaUrl": "https://example.com/media/site-1.jpg",
+          "description": "Lobby demolition progress"
+        }
+      ]
+    },
+    {
+      "id": "dl-002",
+      "logType": "EMPLOYEE",
+      "projectId": null,
+      "projectName": null,
+      "employeeId": "staff-002",
+      "employeeName": "Jordan Site",
+      "date": "2026-02-26",
+      "weather": "Clear",
+      "delayNotes": "General site notes captured and safety briefing completed.",
+      "progressEntries": [],
+      "siteMedia": []
+    },
+    {
+      "id": "dl-003",
+      "logType": "EMPLOYEE",
+      "projectId": null,
+      "projectName": null,
+      "employeeId": "staff-003",
+      "employeeName": "Sam Supervisor",
+      "date": "2026-02-26",
+      "weather": "Clear",
+      "delayNotes": "Bridge utility checks completed and crew handover documented.",
+      "progressEntries": [],
+      "siteMedia": []
+    },
+    {
+      "id": "dl-004",
+      "logType": "EMPLOYEE",
+      "projectId": null,
+      "projectName": null,
+      "employeeId": "staff-004",
+      "employeeName": "Kuda Worker",
+      "date": "2026-02-26",
+      "weather": "Clear",
+      "delayNotes": "Material receiving and staging completed for section A.",
+      "progressEntries": [],
+      "siteMedia": []
+    },
+    {
+      "id": "dl-005",
+      "logType": "EMPLOYEE",
+      "projectId": null,
+      "projectName": null,
+      "employeeId": "staff-005",
+      "employeeName": "Rita Mason",
+      "date": "2026-02-26",
+      "weather": "Clear",
+      "delayNotes": "Masonry prep completed and quality checklist submitted.",
+      "progressEntries": [],
+      "siteMedia": []
+    }
+  ],
+  "scopeItems": [
+    {
+      "id": "scope-001",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "boqCode": "BOQ-100",
+      "targetQuantity": 100,
+      "laborNormFactor": 1.2,
+      "plannedHours": 160,
+      "isOverridden": false,
+      "overrideReason": null
+    },
+    {
+      "id": "scope-002",
+      "projectId": "proj-002",
+      "projectName": "Bridge Expansion",
+      "boqCode": "BOQ-205",
+      "targetQuantity": 240,
+      "laborNormFactor": 1.05,
+      "plannedHours": 280,
+      "isOverridden": true,
+      "overrideReason": "Adjusted for soil conditions"
+    }
+  ],
+  "materialCatalog": [
+    {
+      "itemCode": "MAT-001",
+      "name": "Rebar 12mm",
+      "standardUnit": "kg"
+    },
+    {
+      "itemCode": "MAT-002",
+      "name": "Concrete Grade 30",
+      "standardUnit": "m3"
+    },
+    {
+      "itemCode": "TOOL-001",
+      "name": "Scaffolding Clamps",
+      "standardUnit": "units"
+    },
+    {
+      "itemCode": "PPE-001",
+      "name": "Safety Helmets",
+      "standardUnit": "units"
+    },
+    {
+      "itemCode": "MAT-003",
+      "name": "Copper Cable 4mm",
+      "standardUnit": "m"
+    },
+    {
+      "itemCode": "MAT-004",
+      "name": "Door Hinges",
+      "standardUnit": "sets"
+    }
+  ],
+  "laborNorms": [
+    {
+      "activityCode": "LAB-001",
+      "description": "Rebar installation",
+      "unit": "kg",
+      "standardHoursPerUnit": 0.08
+    },
+    {
+      "activityCode": "LAB-002",
+      "description": "Concrete pour",
+      "unit": "m3",
+      "standardHoursPerUnit": 0.45
+    }
+  ],
+  "assetAllocations": [
+    {
+      "id": "alloc-001",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "assetId": "asset-001",
+      "assetCode": "EXC-100",
+      "allocationDate": "2026-01-20",
+      "deallocationDate": null,
+      "entryTime": "2026-01-20T08:00:00",
+      "engineHours": 120
+    },
+    {
+      "id": "alloc-002",
+      "projectId": "proj-002",
+      "projectName": "Bridge Expansion",
+      "assetId": "asset-002",
+      "assetCode": "TRK-220",
+      "allocationDate": "2026-01-10",
+      "deallocationDate": "2026-01-28",
+      "entryTime": "2026-01-10T09:00:00",
+      "engineHours": 54
+    }
+  ],
+  "teamAssignments": [
+    {
+      "id": "team-001",
+      "project": {
+        "id": "proj-001"
+      },
+      "projectName": "Office Renovation",
+      "staff": {
+        "id": "staff-002"
+      },
+      "staffName": "Jordan Site",
+      "assignmentDate": "2026-01-20",
+      "startDate": "2026-01-20",
+      "endDate": "2026-08-30",
+      "deactivationDate": null
+    },
+    {
+      "id": "team-002",
+      "project": {
+        "id": "proj-002"
+      },
+      "projectName": "Bridge Expansion",
+      "staff": {
+        "id": "staff-003"
+      },
+      "staffName": "Sam Supervisor",
+      "assignmentDate": "2026-02-10",
+      "startDate": "2026-02-10",
+      "endDate": "2026-12-15",
+      "deactivationDate": null
+    },
+    {
+      "id": "team-003",
+      "project": {
+        "id": "proj-001"
+      },
+      "projectName": "Office Renovation",
+      "staff": {
+        "id": "staff-004"
+      },
+      "staffName": "Kuda Worker",
+      "assignmentDate": "2026-01-25",
+      "startDate": "2026-01-25",
+      "endDate": "2026-06-30",
+      "deactivationDate": null
+    },
+    {
+      "id": "team-004",
+      "project": {
+        "id": "proj-001"
+      },
+      "projectName": "Office Renovation",
+      "staff": {
+        "id": "staff-005"
+      },
+      "staffName": "Rita Mason",
+      "assignmentDate": "2026-01-25",
+      "startDate": "2026-01-25",
+      "endDate": "2026-06-30",
+      "deactivationDate": null
+    },
+    {
+      "id": "team-005",
+      "project": {
+        "id": "proj-001"
+      },
+      "projectName": "Office Renovation",
+      "staff": {
+        "id": "staff-003"
+      },
+      "staffName": "Sam Supervisor",
+      "assignmentDate": "2026-01-20",
+      "startDate": "2026-01-20",
+      "endDate": "2026-08-30",
+      "deactivationDate": null
+    }
+  ],
+  "sheqTemplates": [
+    {
+      "id": "sheq-001",
+      "templateName": "Site Safety Checklist",
+      "items": [
+        "PPE compliance",
+        "Fire extinguishers",
+        "First aid kit"
+      ]
+    }
+  ],
+  "costCodes": [
+    {
+      "id": "cc-001",
+      "code": "MAT-100",
+      "name": "Concrete",
+      "category": "MATERIALS",
+      "description": "Concrete and aggregates",
+      "active": true
+    },
+    {
+      "id": "cc-002",
+      "code": "LAB-200",
+      "name": "Skilled Labor",
+      "category": "LABOR",
+      "description": "Skilled trade labor",
+      "active": true
+    },
+    {
+      "id": "cc-003",
+      "code": "EQP-300",
+      "name": "Plant Hire",
+      "category": "EQUIPMENT",
+      "description": "Equipment rental",
+      "active": true
+    },
+    {
+      "id": "cc-004",
+      "code": "SUB-400",
+      "name": "Subcontract",
+      "category": "SUBCONTRACTOR",
+      "description": "Specialist subcontractors",
+      "active": true
+    }
+  ],
+  "budgets": [
+    {
+      "id": "budget-001",
+      "projectId": "proj-001",
+      "totalValue": 2400000,
+      "status": "APPROVED",
+      "approvedBy": "staff-001",
+      "approvedAt": "2026-01-10T10:00:00",
+      "createdAt": "2026-01-05T10:00:00",
+      "updatedAt": "2026-01-20T10:00:00",
+      "totalAllocated": 1500000,
+      "totalCommitted": 300000,
+      "totalSpent": 210000,
+      "unallocatedAmount": 900000
+    },
+    {
+      "id": "budget-002",
+      "projectId": "proj-002",
+      "totalValue": 1750000,
+      "status": "DRAFT",
+      "createdAt": "2026-01-25T08:00:00",
+      "updatedAt": "2026-01-25T08:00:00",
+      "totalAllocated": 600000,
+      "totalCommitted": 0,
+      "totalSpent": 0,
+      "unallocatedAmount": 1150000
+    }
+  ],
+  "budgetLineItems": [
+    {
+      "id": "bli-001",
+      "budgetId": "budget-001",
+      "costCodeId": "cc-001",
+      "costCodeCode": "MAT-100",
+      "costCodeName": "Concrete",
+      "costCodeCategory": "MATERIALS",
+      "allocatedAmount": 800000,
+      "committedAmount": 200000,
+      "spentAmount": 150000,
+      "availableAmount": 450000,
+      "utilizationPercentage": 43.75,
+      "notes": "Concrete works",
+      "createdAt": "2026-01-06T10:00:00",
+      "updatedAt": "2026-01-20T10:00:00"
+    },
+    {
+      "id": "bli-002",
+      "budgetId": "budget-001",
+      "costCodeId": "cc-002",
+      "costCodeCode": "LAB-200",
+      "costCodeName": "Skilled Labor",
+      "costCodeCategory": "LABOR",
+      "allocatedAmount": 500000,
+      "committedAmount": 100000,
+      "spentAmount": 60000,
+      "availableAmount": 340000,
+      "utilizationPercentage": 32,
+      "notes": "Labor allocation",
+      "createdAt": "2026-01-06T10:00:00",
+      "updatedAt": "2026-01-20T10:00:00"
+    }
+  ],
+  "purchaseOrders": [
+    {
+      "id": "po-001",
+      "poNumber": "PO-12345",
+      "projectId": "proj-001",
+      "vendorId": "vendor-001",
+      "status": "APPROVED",
+      "orderDate": "2026-01-22",
+      "expectedDeliveryDate": "2026-02-15",
+      "totalValue": 250000,
+      "receivedValue": 120000,
+      "description": "Concrete and steel",
+      "paymentTerms": "30 days",
+      "deliveryAddress": "12 Main St, Harare",
+      "createdBy": "staff-001",
+      "approvedBy": "staff-001",
+      "approvedAt": "2026-01-23T09:00:00",
+      "createdAt": "2026-01-22T09:00:00",
+      "updatedAt": "2026-01-23T09:00:00",
+      "lineItems": [
+        {
+          "id": "pol-001",
+          "purchaseOrderId": "po-001",
+          "budgetLineItemId": "bli-001",
+          "costCodeCode": "MAT-100",
+          "costCodeName": "Concrete",
+          "description": "Concrete supply",
+          "quantity": 200,
+          "unitPrice": 1000,
+          "lineTotal": 200000,
+          "receivedQuantity": 120,
+          "remainingQuantity": 80,
+          "receivedValue": 120000,
+          "receivedPercentage": 60,
+          "unitOfMeasure": "m3",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-001",
+      "invoiceNumber": "INV-2024-089",
+      "vendorId": "vendor-001",
+      "purchaseOrderId": "po-001",
+      "status": "PENDING",
+      "invoiceDate": "2026-01-28",
+      "dueDate": "2026-02-27",
+      "invoiceAmount": 120000,
+      "taxAmount": 0,
+      "totalAmount": 120000,
+      "paidAmount": 0,
+      "paymentTerms": "30 days",
+      "description": "Concrete delivery",
+      "notes": null,
+      "receivedBy": "staff-001",
+      "createdAt": "2026-01-28T08:00:00",
+      "updatedAt": "2026-01-28T08:00:00",
+      "lineItems": [
+        {
+          "id": "invli-001",
+          "supplierInvoiceId": "inv-001",
+          "poLineItemId": "pol-001",
+          "description": "Concrete supply",
+          "quantity": 120,
+          "unitPrice": 1000,
+          "lineTotal": 120000,
+          "priceVariance": 0,
+          "quantityVariance": 0,
+          "matched": true,
+          "matchNotes": "Matched",
+          "unitOfMeasure": "m3",
+          "notes": null
+        }
+      ]
+    }
+  ],
+  "grns": [
+    {
+      "id": "grn-001",
+      "grnNumber": "GRN-001",
+      "purchaseOrderId": "po-001",
+      "receivedDate": "2026-01-30",
+      "deliveryNote": "DN-100",
+      "notes": null,
+      "conditionNotes": "Good condition",
+      "receivedBy": "staff-002",
+      "documentPath": null,
+      "totalRejectedQuantity": 0,
+      "allGoodsAcceptable": true,
+      "lineItems": [
+        {
+          "id": "grnli-001",
+          "goodsReceivedNoteId": "grn-001",
+          "poLineItemId": "pol-001",
+          "description": "Concrete supply",
+          "receivedQuantity": 120,
+          "acceptedQuantity": 120,
+          "rejectedQuantity": 0,
+          "acceptanceRate": 100,
+          "unitOfMeasure": "m3",
+          "conditionNotes": "OK",
+          "notes": null,
+          "fullyAccepted": true
+        }
+      ]
+    }
+  ],
+  "threeWayMatches": [
+    {
+      "id": "match-001",
+      "invoiceLineItemId": "invli-001",
+      "poLineItemId": "pol-001",
+      "grnLineItemId": "grnli-001",
+      "matchResult": "MATCHED",
+      "matchNotes": "Auto matched",
+      "requiresReview": false,
+      "autoApproved": true,
+      "manuallyReviewed": false,
+      "quantityTolerancePercentage": 5,
+      "priceTolerancePercentage": 5,
+      "matchSuccessful": true,
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "matchedAt": "2026-01-30T12:00:00",
+      "createdAt": "2026-01-30T12:00:00",
+      "updatedAt": "2026-01-30T12:00:00"
+    }
+  ],
+  "timesheets": [
+    {
+      "id": "ts-001",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "staffId": "staff-004",
+      "staffName": "Kuda Worker",
+      "date": "2026-02-03",
+      "clockInTime": "2026-02-03T07:55:00",
+      "clockOutTime": null,
+      "autoClockoutTime": "2026-02-03T17:00:00",
+      "extendedUntil": null,
+      "hoursWorked": 8,
+      "status": "PENDING"
+    },
+    {
+      "id": "ts-002",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "staffId": "staff-005",
+      "staffName": "Rita Mason",
+      "date": "2026-02-03",
+      "clockInTime": "2026-02-03T08:10:00",
+      "clockOutTime": "2026-02-03T17:00:00",
+      "autoClockoutTime": "2026-02-03T17:00:00",
+      "extendedUntil": null,
+      "hoursWorked": 8,
+      "status": "APPROVED",
+      "approvedBy": "staff-002",
+      "approvedAt": "2026-02-03T18:10:00"
+    },
+    {
+      "id": "ts-003",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "staffId": "staff-003",
+      "staffName": "Sam Supervisor",
+      "date": "2026-02-02",
+      "clockInTime": "2026-02-02T07:45:00",
+      "clockOutTime": "2026-02-02T19:00:00",
+      "autoClockoutTime": "2026-02-02T17:00:00",
+      "extendedUntil": "2026-02-02T19:00:00",
+      "hoursWorked": 11,
+      "status": "APPROVED",
+      "approvedBy": "staff-002",
+      "approvedAt": "2026-02-02T19:30:00"
+    },
+    {
+      "id": "ts-004",
+      "projectId": "proj-001",
+      "projectName": "Office Renovation",
+      "staffId": "staff-004",
+      "staffName": "Kuda Worker",
+      "date": "2026-02-01",
+      "clockInTime": "2026-02-01T08:00:00",
+      "clockOutTime": "2026-02-01T17:00:00",
+      "autoClockoutTime": "2026-02-01T17:00:00",
+      "extendedUntil": null,
+      "hoursWorked": 0,
+      "status": "REJECTED",
+      "rejectionReason": "Clock-in location mismatch"
+    }
+  ],
+  "projectMilestones": [
+    {
+      "id": "ms-001",
+      "projectId": "proj-001",
+      "name": "Demolition complete",
+      "description": "All demo works completed",
+      "targetDate": "2026-02-05",
+      "actualDate": "2026-02-03",
+      "status": "COMPLETE",
+      "progressPercent": 100,
+      "createdAt": "2026-01-20T10:00:00",
+      "updatedAt": "2026-02-03T10:00:00"
+    },
+    {
+      "id": "ms-002",
+      "projectId": "proj-001",
+      "name": "Structural framing",
+      "description": "Main framing progress",
+      "targetDate": "2026-03-10",
+      "actualDate": null,
+      "status": "IN_PROGRESS",
+      "progressPercent": 60,
+      "createdAt": "2026-02-04T10:00:00",
+      "updatedAt": "2026-02-04T10:00:00"
+    },
+    {
+      "id": "ms-003",
+      "projectId": "proj-001",
+      "name": "MEP installation",
+      "description": "Mechanical, electrical, plumbing",
+      "targetDate": "2026-04-20",
+      "actualDate": null,
+      "status": "PLANNED",
+      "progressPercent": 0,
+      "createdAt": "2026-02-04T10:00:00",
+      "updatedAt": "2026-02-04T10:00:00"
+    },
+    {
+      "id": "ms-004",
+      "projectId": "proj-001",
+      "name": "Interior finishes",
+      "description": "Ceilings, floors, paint",
+      "targetDate": "2026-06-15",
+      "actualDate": null,
+      "status": "PLANNED",
+      "progressPercent": 0,
+      "createdAt": "2026-02-04T10:00:00",
+      "updatedAt": "2026-02-04T10:00:00"
+    },
+    {
+      "id": "ms-005",
+      "projectId": "proj-002",
+      "name": "Site setup",
+      "description": "Site mobilization and fencing",
+      "targetDate": "2026-03-20",
+      "actualDate": null,
+      "status": "PLANNED",
+      "progressPercent": 0,
+      "createdAt": "2026-02-04T10:00:00",
+      "updatedAt": "2026-02-04T10:00:00"
+    },
+    {
+      "id": "ms-006",
+      "projectId": "proj-002",
+      "name": "Foundation works",
+      "description": "Piling and foundations",
+      "targetDate": "2026-05-01",
+      "actualDate": null,
+      "status": "PLANNED",
+      "progressPercent": 0,
+      "createdAt": "2026-02-04T10:00:00",
+      "updatedAt": "2026-02-04T10:00:00"
+    }
+  ],
+  "projectMedia": [
+    {
+      "id": "pm-001",
+      "projectId": "proj-001",
+      "mediaUrl": "https://example.com/media/proj-001/photo-1.jpg",
+      "description": "Lobby area",
+      "mediaType": "PHOTO",
+      "capturedAt": "2026-02-01T09:00:00",
+      "createdAt": "2026-02-01T09:00:00",
+      "updatedAt": "2026-02-01T09:00:00"
+    }
+  ]
+}

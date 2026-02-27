@@ -87,45 +87,91 @@ export default function StoresWorkQueuePage() {
           {incomingRequests.length === 0 ? (
             <p className="muted">No requests are waiting for stores review.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Quantity</th>
-                    <th>Stock</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Recommended Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {incomingRequests.map((item) => {
-                    const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
-                    return (
-                      <tr key={item.id}>
-                        <td>
-                          <div className="table-title">{item.itemName}</div>
-                          <div className="muted">{item.id} · {item.requestType}</div>
-                        </td>
-                        <td>
-                          <div className="table-title">{item.projectName}</div>
-                          <div className="muted">{item.requestedBy}</div>
-                        </td>
-                        <td>{item.requestedQuantity} {item.unit}</td>
-                        <td>{item.availableInStores} {item.unit}</td>
-                        <td>{item.priority}</td>
-                        <td>
-                          <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                        </td>
-                        <td>{hasSufficientStock ? "Allocate from stores" : "Escalate to Finance"}</td>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Quantity</th>
+                        <th>Stock</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Recommended Action</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </TableRoot>
-            </Table>
+                    </thead>
+                    <tbody>
+                      {incomingRequests.map((item) => {
+                        const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
+                        return (
+                          <tr key={item.id}>
+                            <td>
+                              <div className="table-title">{item.itemName}</div>
+                              <div className="muted">{item.id} - {item.requestType}</div>
+                            </td>
+                            <td>
+                              <div className="table-title">{item.projectName}</div>
+                              <div className="muted">{item.requestedBy}</div>
+                            </td>
+                            <td>{item.requestedQuantity} {item.unit}</td>
+                            <td>{item.availableInStores} {item.unit}</td>
+                            <td>{item.priority}</td>
+                            <td>
+                              <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                            </td>
+                            <td>{hasSufficientStock ? "Allocate from stores" : "Escalate to Finance"}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {incomingRequests.map((item) => {
+                  const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
+                  return (
+                    <article key={`intake-mobile-${item.id}`} className="mobile-card">
+                      <div className="mobile-card-head">
+                        <div>
+                          <p className="mobile-card-title">{item.itemName}</p>
+                          <p className="mobile-card-subtitle">{item.id} - {item.requestType}</p>
+                        </div>
+                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                      </div>
+                      <div className="mobile-card-grid">
+                        <div className="mobile-field">
+                          <span className="mobile-label">Project</span>
+                          <span className="mobile-value">{item.projectName}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Requested By</span>
+                          <span className="mobile-value">{item.requestedBy}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Quantity</span>
+                          <span className="mobile-value">{item.requestedQuantity} {item.unit}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Stock</span>
+                          <span className="mobile-value">{item.availableInStores} {item.unit}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Priority</span>
+                          <span className="mobile-value">{item.priority}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Recommended</span>
+                          <span className="mobile-value">{hasSufficientStock ? "Allocate from stores" : "Escalate to Finance"}</span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>
@@ -139,37 +185,72 @@ export default function StoresWorkQueuePage() {
           {procurementQueue.length === 0 ? (
             <p className="muted">No requests currently waiting on Finance procurement.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Finance Ref</th>
-                    <th>Status</th>
-                    <th>Last Update</th>
-                    <th>Next Step</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {procurementQueue.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="table-title">{item.itemName}</div>
-                        <div className="muted">{item.id}</div>
-                      </td>
-                      <td>{item.projectName}</td>
-                      <td>{item.financeReference ?? "-"}</td>
-                      <td>
-                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                      </td>
-                      <td>{formatDateTime(item.orderedAt ?? item.requestedAt)}</td>
-                      <td>{item.status === "ORDERED_BY_FINANCE" ? "Receive into stores" : "Await PO / vendor"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Finance Ref</th>
+                        <th>Status</th>
+                        <th>Last Update</th>
+                        <th>Next Step</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {procurementQueue.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <div className="table-title">{item.itemName}</div>
+                            <div className="muted">{item.id}</div>
+                          </td>
+                          <td>{item.projectName}</td>
+                          <td>{item.financeReference ?? "-"}</td>
+                          <td>
+                            <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                          </td>
+                          <td>{formatDateTime(item.orderedAt ?? item.requestedAt)}</td>
+                          <td>{item.status === "ORDERED_BY_FINANCE" ? "Receive into stores" : "Await PO / vendor"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {procurementQueue.map((item) => (
+                  <article key={`procurement-mobile-${item.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{item.itemName}</p>
+                        <p className="mobile-card-subtitle">{item.id}</p>
+                      </div>
+                      <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Project</span>
+                        <span className="mobile-value">{item.projectName}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Finance Ref</span>
+                        <span className="mobile-value">{item.financeReference ?? "-"}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Last Update</span>
+                        <span className="mobile-value">{formatDateTime(item.orderedAt ?? item.requestedAt)}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Next Step</span>
+                        <span className="mobile-value">{item.status === "ORDERED_BY_FINANCE" ? "Receive into stores" : "Await PO / vendor"}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>
@@ -183,37 +264,72 @@ export default function StoresWorkQueuePage() {
           {dispatchQueue.length === 0 ? (
             <p className="muted">No requests currently waiting for dispatch.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
-                    <th>Ready Since</th>
-                    <th>Next Step</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dispatchQueue.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="table-title">{item.itemName}</div>
-                        <div className="muted">{item.id}</div>
-                      </td>
-                      <td>{item.projectName}</td>
-                      <td>{item.requestedQuantity} {item.unit}</td>
-                      <td>
-                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                      </td>
-                      <td>{formatDateTime(item.receivedAt ?? item.requestedAt)}</td>
-                      <td>Dispatch to project</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Ready Since</th>
+                        <th>Next Step</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dispatchQueue.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <div className="table-title">{item.itemName}</div>
+                            <div className="muted">{item.id}</div>
+                          </td>
+                          <td>{item.projectName}</td>
+                          <td>{item.requestedQuantity} {item.unit}</td>
+                          <td>
+                            <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                          </td>
+                          <td>{formatDateTime(item.receivedAt ?? item.requestedAt)}</td>
+                          <td>Dispatch to project</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {dispatchQueue.map((item) => (
+                  <article key={`dispatch-mobile-${item.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{item.itemName}</p>
+                        <p className="mobile-card-subtitle">{item.id}</p>
+                      </div>
+                      <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Project</span>
+                        <span className="mobile-value">{item.projectName}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Quantity</span>
+                        <span className="mobile-value">{item.requestedQuantity} {item.unit}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Ready Since</span>
+                        <span className="mobile-value">{formatDateTime(item.receivedAt ?? item.requestedAt)}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Next Step</span>
+                        <span className="mobile-value">Dispatch to project</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>

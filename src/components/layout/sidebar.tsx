@@ -129,7 +129,15 @@ const roleLabels: Record<string, string> = {
   STORES: "Stores"
 };
 
-export default function Sidebar({ user }: { user: AuthContextValue }) {
+export default function Sidebar({
+  user,
+  isOpen,
+  onClose
+}: {
+  user: AuthContextValue;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
   const resolvedRole: Role | null =
@@ -150,7 +158,7 @@ export default function Sidebar({ user }: { user: AuthContextValue }) {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={isOpen ? "sidebar sidebar-open" : "sidebar"}>
       <div className="sidebar-brand">
         <span className="brand-mark">
           <Image
@@ -162,6 +170,11 @@ export default function Sidebar({ user }: { user: AuthContextValue }) {
             priority
           />
         </span>
+        <button type="button" className="sidebar-close" onClick={onClose} aria-label="Close navigation menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
       </div>
       <nav className="sidebar-nav">
         {navSections.map((section) => (
@@ -174,6 +187,7 @@ export default function Sidebar({ user }: { user: AuthContextValue }) {
                 className={isActive(pathname, item.href) ? "active" : ""}
                 title={item.label}
                 aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                onClick={onClose}
               >
                 <NavIcon name={item.icon} />
                 <span className="nav-label">{item.label}</span>
@@ -193,7 +207,14 @@ export default function Sidebar({ user }: { user: AuthContextValue }) {
             <path d="M6 9l6 6 6-6" />
           </svg>
         </div>
-        <button type="button" className="ghost-button sidebar-signout" onClick={handleLogout}>
+        <button
+          type="button"
+          className="ghost-button sidebar-signout"
+          onClick={() => {
+            onClose();
+            handleLogout();
+          }}
+        >
           Sign out
         </button>
       </div>

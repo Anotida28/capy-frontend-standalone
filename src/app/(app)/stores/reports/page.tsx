@@ -183,26 +183,47 @@ export default function StoresReportsPage() {
             <h2>Request Status Summary</h2>
             <p className="muted">Distribution of operational request statuses.</p>
           </div>
-          <Table>
-            <TableRoot>
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(statusCounts).map(([status, count]) => (
-                  <tr key={status}>
-                    <td>
-                      <Badge label={labelize(status)} tone={getStatusTone(status)} />
-                    </td>
-                    <td>{count}</td>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Count</th>
                   </tr>
-                ))}
-              </tbody>
-            </TableRoot>
-          </Table>
+                </thead>
+                <tbody>
+                  {Object.entries(statusCounts).map(([status, count]) => (
+                    <tr key={status}>
+                      <td>
+                        <Badge label={labelize(status)} tone={getStatusTone(status)} />
+                      </td>
+                      <td>{count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {Object.entries(statusCounts).map(([status, count]) => (
+              <article key={`status-mobile-${status}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">{labelize(status)}</p>
+                    <p className="mobile-card-subtitle">Request Status</p>
+                  </div>
+                  <Badge label={labelize(status)} tone={getStatusTone(status)} />
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Count</span>
+                    <span className="mobile-value">{count}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </SectionCard>
 
         <SectionCard>
@@ -210,24 +231,44 @@ export default function StoresReportsPage() {
             <h2>Request Type Mix</h2>
             <p className="muted">Demand split by material, tools, and PPE.</p>
           </div>
-          <Table>
-            <TableRoot>
-              <thead>
-                <tr>
-                  <th>Type</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(requestTypeCounts).map(([type, count]) => (
-                  <tr key={type}>
-                    <td>{type}</td>
-                    <td>{count}</td>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Count</th>
                   </tr>
-                ))}
-              </tbody>
-            </TableRoot>
-          </Table>
+                </thead>
+                <tbody>
+                  {Object.entries(requestTypeCounts).map(([type, count]) => (
+                    <tr key={type}>
+                      <td>{type}</td>
+                      <td>{count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {Object.entries(requestTypeCounts).map(([type, count]) => (
+              <article key={`type-mobile-${type}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">{type}</p>
+                    <p className="mobile-card-subtitle">Request Type</p>
+                  </div>
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Count</span>
+                    <span className="mobile-value">{count}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </SectionCard>
       </div>
 
@@ -237,33 +278,69 @@ export default function StoresReportsPage() {
             <h2>Project Consumption Snapshot</h2>
             <p className="muted">Allocated vs used vs returned quantities by project.</p>
           </div>
-          <Table>
-            <TableRoot>
-              <thead>
-                <tr>
-                  <th>Project</th>
-                  <th>Allocated</th>
-                  <th>Used</th>
-                  <th>Returned</th>
-                  <th>Utilization</th>
-                </tr>
-              </thead>
-              <tbody>
-                {projectConsumption.map((item) => {
-                  const utilization = item.allocated === 0 ? 0 : (item.used / item.allocated) * 100;
-                  return (
-                    <tr key={item.projectName}>
-                      <td>{item.projectName}</td>
-                      <td>{item.allocated}</td>
-                      <td>{item.used}</td>
-                      <td>{item.returned}</td>
-                      <td>{formatPercent(utilization)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </TableRoot>
-          </Table>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot>
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Allocated</th>
+                    <th>Used</th>
+                    <th>Returned</th>
+                    <th>Utilization</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectConsumption.map((item) => {
+                    const utilization = item.allocated === 0 ? 0 : (item.used / item.allocated) * 100;
+                    return (
+                      <tr key={item.projectName}>
+                        <td>{item.projectName}</td>
+                        <td>{item.allocated}</td>
+                        <td>{item.used}</td>
+                        <td>{item.returned}</td>
+                        <td>{formatPercent(utilization)}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {projectConsumption.map((item) => {
+              const utilization = item.allocated === 0 ? 0 : (item.used / item.allocated) * 100;
+              return (
+                <article key={`consumption-mobile-${item.projectName}`} className="mobile-card">
+                  <div className="mobile-card-head">
+                    <div>
+                      <p className="mobile-card-title">{item.projectName}</p>
+                      <p className="mobile-card-subtitle">Project Consumption</p>
+                    </div>
+                    <span className="mobile-value">{formatPercent(utilization)}</span>
+                  </div>
+                  <div className="mobile-card-grid">
+                    <div className="mobile-field">
+                      <span className="mobile-label">Allocated</span>
+                      <span className="mobile-value">{item.allocated}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Used</span>
+                      <span className="mobile-value">{item.used}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Returned</span>
+                      <span className="mobile-value">{item.returned}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Utilization</span>
+                      <span className="mobile-value">{formatPercent(utilization)}</span>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
         </SectionCard>
       </section>
 
@@ -273,34 +350,63 @@ export default function StoresReportsPage() {
             <h2>Latest Item Ledger</h2>
             <p className="muted">Recent lifecycle events for requests, procurement, dispatch, and returns.</p>
           </div>
-          <Table>
-            <TableRoot>
-              <thead>
-                <tr>
-                  <th>Time</th>
-                  <th>Event</th>
-                  <th>Reference</th>
-                  <th>Project</th>
-                  <th>Quantity</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ledgerEntries.map((entry) => (
-                  <tr key={entry.id}>
-                    <td>{formatDateTime(entry.happenedAt)}</td>
-                    <td>{entry.event}</td>
-                    <td>{entry.reference}</td>
-                    <td>{entry.projectName}</td>
-                    <td>{entry.quantity} {entry.unit}</td>
-                    <td>
-                      <Badge label={labelize(entry.status)} tone={getStatusTone(entry.status)} />
-                    </td>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Event</th>
+                    <th>Reference</th>
+                    <th>Project</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </TableRoot>
-          </Table>
+                </thead>
+                <tbody>
+                  {ledgerEntries.map((entry) => (
+                    <tr key={entry.id}>
+                      <td>{formatDateTime(entry.happenedAt)}</td>
+                      <td>{entry.event}</td>
+                      <td>{entry.reference}</td>
+                      <td>{entry.projectName}</td>
+                      <td>{entry.quantity} {entry.unit}</td>
+                      <td>
+                        <Badge label={labelize(entry.status)} tone={getStatusTone(entry.status)} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {ledgerEntries.map((entry) => (
+              <article key={`ledger-mobile-${entry.id}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">{entry.event}</p>
+                    <p className="mobile-card-subtitle">{formatDateTime(entry.happenedAt)}</p>
+                  </div>
+                  <Badge label={labelize(entry.status)} tone={getStatusTone(entry.status)} />
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Reference</span>
+                    <span className="mobile-value">{entry.reference}</span>
+                  </div>
+                  <div className="mobile-field">
+                    <span className="mobile-label">Project</span>
+                    <span className="mobile-value">{entry.projectName}</span>
+                  </div>
+                  <div className="mobile-field">
+                    <span className="mobile-label">Quantity</span>
+                    <span className="mobile-value">{entry.quantity} {entry.unit}</span>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </SectionCard>
       </section>
     </PageShell>

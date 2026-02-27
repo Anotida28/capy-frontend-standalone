@@ -306,56 +306,108 @@ export default function StoresDashboardPage() {
           {incomingRequests.length === 0 ? (
             <p className="muted">No incoming requests right now.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Quantity</th>
-                    <th>Stores Stock</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th className="actions-cell">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {incomingRequests.map((item) => {
-                    const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
-                    return (
-                      <tr key={item.id}>
-                        <td>
-                          <div className="table-title">{item.itemName}</div>
-                          <div className="muted">
-                            {item.id} · {item.requestType}
-                          </div>
-                        </td>
-                        <td>
-                          <div className="table-title">{item.projectName}</div>
-                          <div className="muted">{item.requestedBy}</div>
-                        </td>
-                        <td>{item.requestedQuantity} {item.unit}</td>
-                        <td>{item.availableInStores} {item.unit}</td>
-                        <td>{item.priority}</td>
-                        <td>
-                          <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                        </td>
-                        <td className="actions-cell">
-                          <div className="row-actions">
-                            <Button variant="ghost" onClick={() => allocateFromStores(item.id)} disabled={!hasSufficientStock}>
-                              Allocate
-                            </Button>
-                            <Button variant="ghost" onClick={() => escalateToFinance(item.id)}>
-                              Escalate to Finance
-                            </Button>
-                          </div>
-                        </td>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Quantity</th>
+                        <th>Stores Stock</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th className="actions-cell">Actions</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </TableRoot>
-            </Table>
+                    </thead>
+                    <tbody>
+                      {incomingRequests.map((item) => {
+                        const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
+                        return (
+                          <tr key={item.id}>
+                            <td>
+                              <div className="table-title">{item.itemName}</div>
+                              <div className="muted">
+                                {item.id} - {item.requestType}
+                              </div>
+                            </td>
+                            <td>
+                              <div className="table-title">{item.projectName}</div>
+                              <div className="muted">{item.requestedBy}</div>
+                            </td>
+                            <td>{item.requestedQuantity} {item.unit}</td>
+                            <td>{item.availableInStores} {item.unit}</td>
+                            <td>{item.priority}</td>
+                            <td>
+                              <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                            </td>
+                            <td className="actions-cell">
+                              <div className="row-actions">
+                                <Button variant="ghost" onClick={() => allocateFromStores(item.id)} disabled={!hasSufficientStock}>
+                                  Allocate
+                                </Button>
+                                <Button variant="ghost" onClick={() => escalateToFinance(item.id)}>
+                                  Escalate to Finance
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {incomingRequests.map((item) => {
+                  const hasSufficientStock = item.availableInStores >= item.requestedQuantity;
+                  return (
+                    <article key={`incoming-mobile-${item.id}`} className="mobile-card">
+                      <div className="mobile-card-head">
+                        <div>
+                          <p className="mobile-card-title">{item.itemName}</p>
+                          <p className="mobile-card-subtitle">{item.id} - {item.requestType}</p>
+                        </div>
+                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                      </div>
+                      <div className="mobile-card-grid">
+                        <div className="mobile-field">
+                          <span className="mobile-label">Project</span>
+                          <span className="mobile-value">{item.projectName}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Requested By</span>
+                          <span className="mobile-value">{item.requestedBy}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Quantity</span>
+                          <span className="mobile-value">{item.requestedQuantity} {item.unit}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Stores Stock</span>
+                          <span className="mobile-value">{item.availableInStores} {item.unit}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Priority</span>
+                          <span className="mobile-value">{item.priority}</span>
+                        </div>
+                      </div>
+                      <div className="mobile-card-actions">
+                        <div className="row-actions">
+                          <Button variant="ghost" onClick={() => allocateFromStores(item.id)} disabled={!hasSufficientStock}>
+                            Allocate
+                          </Button>
+                          <Button variant="ghost" onClick={() => escalateToFinance(item.id)}>
+                            Escalate to Finance
+                          </Button>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>
@@ -369,54 +421,103 @@ export default function StoresDashboardPage() {
           {financeQueue.length === 0 ? (
             <p className="muted">No finance escalations currently.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Finance Ref</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
-                    <th className="actions-cell">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {financeQueue.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="table-title">{item.itemName}</div>
-                        <div className="muted">{item.id}</div>
-                      </td>
-                      <td>{item.projectName}</td>
-                      <td>{item.financeReference ?? "-"}</td>
-                      <td>{item.requestedQuantity} {item.unit}</td>
-                      <td>
-                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                      </td>
-                      <td className="actions-cell">
-                        <div className="row-actions">
-                          <Button
-                            variant="ghost"
-                            onClick={() => markFinanceOrdered(item.id)}
-                            disabled={item.status !== "ESCALATED_TO_FINANCE"}
-                          >
-                            Mark Ordered
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            onClick={() => markReceivedInStores(item.id)}
-                            disabled={item.status !== "ORDERED_BY_FINANCE"}
-                          >
-                            Mark Received
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Finance Ref</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th className="actions-cell">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {financeQueue.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <div className="table-title">{item.itemName}</div>
+                            <div className="muted">{item.id}</div>
+                          </td>
+                          <td>{item.projectName}</td>
+                          <td>{item.financeReference ?? "-"}</td>
+                          <td>{item.requestedQuantity} {item.unit}</td>
+                          <td>
+                            <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                          </td>
+                          <td className="actions-cell">
+                            <div className="row-actions">
+                              <Button
+                                variant="ghost"
+                                onClick={() => markFinanceOrdered(item.id)}
+                                disabled={item.status !== "ESCALATED_TO_FINANCE"}
+                              >
+                                Mark Ordered
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                onClick={() => markReceivedInStores(item.id)}
+                                disabled={item.status !== "ORDERED_BY_FINANCE"}
+                              >
+                                Mark Received
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {financeQueue.map((item) => (
+                  <article key={`finance-mobile-${item.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{item.itemName}</p>
+                        <p className="mobile-card-subtitle">{item.id}</p>
+                      </div>
+                      <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Project</span>
+                        <span className="mobile-value">{item.projectName}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Finance Ref</span>
+                        <span className="mobile-value">{item.financeReference ?? "-"}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Quantity</span>
+                        <span className="mobile-value">{item.requestedQuantity} {item.unit}</span>
+                      </div>
+                    </div>
+                    <div className="mobile-card-actions">
+                      <div className="row-actions">
+                        <Button
+                          variant="ghost"
+                          onClick={() => markFinanceOrdered(item.id)}
+                          disabled={item.status !== "ESCALATED_TO_FINANCE"}
+                        >
+                          Mark Ordered
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => markReceivedInStores(item.id)}
+                          disabled={item.status !== "ORDERED_BY_FINANCE"}
+                        >
+                          Mark Received
+                        </Button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>
@@ -430,45 +531,85 @@ export default function StoresDashboardPage() {
           {dispatchQueue.length === 0 ? (
             <p className="muted">Nothing to dispatch yet.</p>
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Request</th>
-                    <th>Project</th>
-                    <th>Quantity</th>
-                    <th>Status</th>
-                    <th>Last Update</th>
-                    <th className="actions-cell">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dispatchQueue.map((item) => (
-                    <tr key={item.id}>
-                      <td>
-                        <div className="table-title">{item.itemName}</div>
-                        <div className="muted">{item.id}</div>
-                      </td>
-                      <td>{item.projectName}</td>
-                      <td>{item.requestedQuantity} {item.unit}</td>
-                      <td>
-                        <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
-                      </td>
-                      <td>{formatDateTime(item.dispatchedAt ?? item.receivedAt ?? item.requestedAt)}</td>
-                      <td className="actions-cell">
-                        <Button
-                          variant="ghost"
-                          onClick={() => dispatchToProject(item.id)}
-                          disabled={item.status === "DISPATCHED_TO_PROJECT"}
-                        >
-                          Dispatch to Project
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Request</th>
+                        <th>Project</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Last Update</th>
+                        <th className="actions-cell">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {dispatchQueue.map((item) => (
+                        <tr key={item.id}>
+                          <td>
+                            <div className="table-title">{item.itemName}</div>
+                            <div className="muted">{item.id}</div>
+                          </td>
+                          <td>{item.projectName}</td>
+                          <td>{item.requestedQuantity} {item.unit}</td>
+                          <td>
+                            <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                          </td>
+                          <td>{formatDateTime(item.dispatchedAt ?? item.receivedAt ?? item.requestedAt)}</td>
+                          <td className="actions-cell">
+                            <Button
+                              variant="ghost"
+                              onClick={() => dispatchToProject(item.id)}
+                              disabled={item.status === "DISPATCHED_TO_PROJECT"}
+                            >
+                              Dispatch to Project
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {dispatchQueue.map((item) => (
+                  <article key={`dispatch-mobile-${item.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{item.itemName}</p>
+                        <p className="mobile-card-subtitle">{item.id}</p>
+                      </div>
+                      <Badge label={labelize(item.status)} tone={getStatusTone(item.status)} />
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Project</span>
+                        <span className="mobile-value">{item.projectName}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Quantity</span>
+                        <span className="mobile-value">{item.requestedQuantity} {item.unit}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Last Update</span>
+                        <span className="mobile-value">{formatDateTime(item.dispatchedAt ?? item.receivedAt ?? item.requestedAt)}</span>
+                      </div>
+                    </div>
+                    <div className="mobile-card-actions">
+                      <Button
+                        variant="ghost"
+                        onClick={() => dispatchToProject(item.id)}
+                        disabled={item.status === "DISPATCHED_TO_PROJECT"}
+                      >
+                        Dispatch to Project
+                      </Button>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
       </section>

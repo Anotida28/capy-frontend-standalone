@@ -30,7 +30,7 @@ const formatCategory = (category?: Asset["category"] | null) => {
 
 const formatPeriod = (start?: string | null, end?: string | null) => {
   if (!start && !end) return "-";
-  return `${start ? formatDate(start) : "Start not set"} → ${end ? formatDate(end) : "Open"}`;
+  return `${start ? formatDate(start) : "Start not set"} -> ${end ? formatDate(end) : "Open"}`;
 };
 
 export function AssetTable({
@@ -49,89 +49,156 @@ export function AssetTable({
   const { tableRef, getRowProps } = useTableKeyboardNavigation(items.length);
 
   return (
-    <Table>
-      <TableRoot ref={tableRef}>
-        <thead>
-          <tr>
-            <th>Asset</th>
-            <th>Category</th>
-            <th>Allocation</th>
-            <th>Person in Charge</th>
-            <th>Rental Period</th>
-            <th className="status-cell">Status</th>
-            <th className="actions-cell">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((asset, index) => (
-            <tr
-              key={asset.id ?? asset.assetCode}
-              {...getRowProps(index, {
-                onEnter: () => {
-                  if (asset.id) router.push(`/assets/${asset.id}`);
-                },
-                disabled: !asset.id
-              })}
-            >
-              <td>
-                <div className="table-title">
+    <>
+      <div className="desktop-table">
+        <Table>
+          <TableRoot ref={tableRef}>
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Category</th>
+                <th>Allocation</th>
+                <th>Person in Charge</th>
+                <th>Rental Period</th>
+                <th className="status-cell">Status</th>
+                <th className="actions-cell">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((asset, index) => (
+                <tr
+                  key={asset.id ?? asset.assetCode}
+                  {...getRowProps(index, {
+                    onEnter: () => {
+                      if (asset.id) router.push(`/assets/${asset.id}`);
+                    },
+                    disabled: !asset.id
+                  })}
+                >
+                  <td>
+                    <div className="table-title">
+                      <HighlightText text={asset.assetCode} query={query} />
+                    </div>
+                    <div className="muted">
+                      <HighlightText
+                        text={[asset.make, asset.model].filter(Boolean).join(" ") || asset.type || "-"}
+                        query={query}
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <HighlightText text={formatCategory(asset.category)} query={query} />
+                  </td>
+                  <td>
+                    <div className="table-title">
+                      <HighlightText text={asset.assignedProjectName ?? asset.assignedProjectId ?? "-"} query={query} />
+                    </div>
+                    <div className="muted">
+                      <HighlightText text={asset.availability ?? "Not set"} query={query} />
+                    </div>
+                  </td>
+                  <td>
+                    <div className="table-title">
+                      <HighlightText
+                        text={asset.personInChargeName ?? asset.personInChargeId ?? asset.operatorId ?? "-"}
+                        query={query}
+                      />
+                    </div>
+                    <div className="muted">
+                      <HighlightText text={asset.personInChargeId ?? asset.operatorId ?? "Staff ID not set"} query={query} />
+                    </div>
+                  </td>
+                  <td>
+                    <div className="table-title">{formatPeriod(asset.rentalStartDate, asset.rentalEndDate)}</div>
+                    <div className="muted">{asset.ownership ?? "Ownership not set"}</div>
+                  </td>
+                  <td className="status-cell">
+                    {asset.status ? <Badge label={asset.status} tone={getStatusTone(asset.status)} /> : "-"}
+                  </td>
+                  <td className="actions-cell">
+                    <div className="row-actions">
+                      <Button variant="ghost" onClick={() => asset.id && router.push(`/assets/${asset.id}`)}>
+                        View -&gt;
+                      </Button>
+                      {canEdit ? (
+                        <RowActions
+                          actions={[
+                            { label: "Edit", onClick: () => onEdit(asset) },
+                            { label: "Delete", onClick: () => onDelete(asset), tone: "destructive" }
+                          ]}
+                        />
+                      ) : null}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </TableRoot>
+        </Table>
+      </div>
+
+      <div className="mobile-list">
+        {items.map((asset) => (
+          <article key={`mobile-${asset.id ?? asset.assetCode}`} className="mobile-card">
+            <div className="mobile-card-head">
+              <div>
+                <p className="mobile-card-title">
                   <HighlightText text={asset.assetCode} query={query} />
-                </div>
-                <div className="muted">
+                </p>
+                <p className="mobile-card-subtitle">
                   <HighlightText
                     text={[asset.make, asset.model].filter(Boolean).join(" ") || asset.type || "-"}
                     query={query}
                   />
+                </p>
+              </div>
+              {asset.status ? <Badge label={asset.status} tone={getStatusTone(asset.status)} /> : null}
+            </div>
+
+            <div className="mobile-card-grid">
+              <div className="mobile-field">
+                <span className="mobile-label">Category</span>
+                <div className="mobile-value">
+                  <HighlightText text={formatCategory(asset.category)} query={query} />
                 </div>
-              </td>
-              <td>
-                <HighlightText text={formatCategory(asset.category)} query={query} />
-              </td>
-              <td>
-                <div className="table-title">
+              </div>
+              <div className="mobile-field">
+                <span className="mobile-label">Allocation</span>
+                <div className="mobile-value">
                   <HighlightText text={asset.assignedProjectName ?? asset.assignedProjectId ?? "-"} query={query} />
                 </div>
-                <div className="muted">
-                  <HighlightText text={asset.availability ?? "Not set"} query={query} />
-                </div>
-              </td>
-              <td>
-                <div className="table-title">
+              </div>
+              <div className="mobile-field">
+                <span className="mobile-label">Person In Charge</span>
+                <div className="mobile-value">
                   <HighlightText
                     text={asset.personInChargeName ?? asset.personInChargeId ?? asset.operatorId ?? "-"}
                     query={query}
                   />
                 </div>
-                <div className="muted">
-                  <HighlightText text={asset.personInChargeId ?? asset.operatorId ?? "Staff ID not set"} query={query} />
-                </div>
-              </td>
-              <td>
-                <div className="table-title">{formatPeriod(asset.rentalStartDate, asset.rentalEndDate)}</div>
-                <div className="muted">{asset.ownership ?? "Ownership not set"}</div>
-              </td>
-              <td className="status-cell">
-                {asset.status ? <Badge label={asset.status} tone={getStatusTone(asset.status)} /> : "-"}
-              </td>
-              <td className="actions-cell">
-                <div className="row-actions">
-                  <Button variant="ghost" onClick={() => asset.id && router.push(`/assets/${asset.id}`)}>
-                    View →
-                  </Button>
-                  {canEdit ? (
-                    <RowActions
-                      actions={[
-                        { label: "Edit", onClick: () => onEdit(asset) },
-                        { label: "Delete", onClick: () => onDelete(asset), tone: "destructive" }
-                      ]}
-                    />
-                  ) : null}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </TableRoot>
-    </Table>
+              </div>
+              <div className="mobile-field">
+                <span className="mobile-label">Rental Period</span>
+                <div className="mobile-value">{formatPeriod(asset.rentalStartDate, asset.rentalEndDate)}</div>
+              </div>
+            </div>
+
+            <div className="mobile-card-actions">
+              <Button variant="ghost" onClick={() => asset.id && router.push(`/assets/${asset.id}`)}>
+                View -&gt;
+              </Button>
+              {canEdit ? (
+                <RowActions
+                  actions={[
+                    { label: "Edit", onClick: () => onEdit(asset) },
+                    { label: "Delete", onClick: () => onDelete(asset), tone: "destructive" }
+                  ]}
+                />
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
   );
 }

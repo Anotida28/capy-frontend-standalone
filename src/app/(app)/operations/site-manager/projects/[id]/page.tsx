@@ -293,43 +293,81 @@ export default function SiteManagerProjectDetailPage() {
           ) : (teamQuery.data ?? []).length === 0 ? (
             <EmptyState title="No staff assigned" description="Assignments will appear here once added." />
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Staff</th>
-                    <th>Task at Site</th>
-                    <th>Start</th>
-                    <th>End</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(teamQuery.data ?? []).map((assignment) => {
-                    const staffRole = assignment.staff?.id ? staffRoleById.get(assignment.staff.id) : undefined;
-                    const roleLabel = staffRole ? STAFF_ROLE_LABEL[staffRole] : "Role not set";
-                    const taskAtSite = staffRole ? SITE_TASK_BY_ROLE[staffRole] : "General site support";
-                    return (
-                      <tr key={assignment.id}>
-                        <td>
-                          <div className="table-title">{assignment.staffName ?? assignment.staff?.id ?? "-"}</div>
-                          <div className="muted">{roleLabel}</div>
-                        </td>
-                        <td>{taskAtSite}</td>
-                        <td>{assignment.startDate}</td>
-                        <td>{assignment.endDate}</td>
-                        <td>
-                          <Badge
-                            label={assignment.deactivationDate ? "Ended" : "Active"}
-                            tone={assignment.deactivationDate ? "inactive" : "approved"}
-                          />
-                        </td>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Staff</th>
+                        <th>Task at Site</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Status</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </TableRoot>
-            </Table>
+                    </thead>
+                    <tbody>
+                      {(teamQuery.data ?? []).map((assignment) => {
+                        const staffRole = assignment.staff?.id ? staffRoleById.get(assignment.staff.id) : undefined;
+                        const roleLabel = staffRole ? STAFF_ROLE_LABEL[staffRole] : "Role not set";
+                        const taskAtSite = staffRole ? SITE_TASK_BY_ROLE[staffRole] : "General site support";
+                        return (
+                          <tr key={assignment.id}>
+                            <td>
+                              <div className="table-title">{assignment.staffName ?? assignment.staff?.id ?? "-"}</div>
+                              <div className="muted">{roleLabel}</div>
+                            </td>
+                            <td>{taskAtSite}</td>
+                            <td>{assignment.startDate}</td>
+                            <td>{assignment.endDate}</td>
+                            <td>
+                              <Badge
+                                label={assignment.deactivationDate ? "Ended" : "Active"}
+                                tone={assignment.deactivationDate ? "inactive" : "approved"}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {(teamQuery.data ?? []).map((assignment) => {
+                  const staffRole = assignment.staff?.id ? staffRoleById.get(assignment.staff.id) : undefined;
+                  const roleLabel = staffRole ? STAFF_ROLE_LABEL[staffRole] : "Role not set";
+                  const taskAtSite = staffRole ? SITE_TASK_BY_ROLE[staffRole] : "General site support";
+                  const statusLabel = assignment.deactivationDate ? "Ended" : "Active";
+                  const statusTone = assignment.deactivationDate ? "inactive" : "approved";
+                  return (
+                    <article key={`staff-mobile-${assignment.id}`} className="mobile-card">
+                      <div className="mobile-card-head">
+                        <div>
+                          <p className="mobile-card-title">{assignment.staffName ?? assignment.staff?.id ?? "-"}</p>
+                          <p className="mobile-card-subtitle">{roleLabel}</p>
+                        </div>
+                        <Badge label={statusLabel} tone={statusTone} />
+                      </div>
+                      <div className="mobile-card-grid">
+                        <div className="mobile-field">
+                          <span className="mobile-label">Task at Site</span>
+                          <span className="mobile-value">{taskAtSite}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">Start</span>
+                          <span className="mobile-value">{assignment.startDate}</span>
+                        </div>
+                        <div className="mobile-field">
+                          <span className="mobile-label">End</span>
+                          <span className="mobile-value">{assignment.endDate}</span>
+                        </div>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </>
           )}
         </SectionCard>
 
@@ -341,31 +379,61 @@ export default function SiteManagerProjectDetailPage() {
           {assignedAssets.length === 0 ? (
             <EmptyState title="No equipment assigned" description="Assigned assets will appear here." />
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Asset</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Availability</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {assignedAssets.map((asset) => (
-                    <tr key={asset.id}>
-                      <td>
-                        <div className="table-title">{asset.assetCode}</div>
-                        <div className="muted">{asset.make ?? ""} {asset.model ?? ""}</div>
-                      </td>
-                      <td>{asset.type ?? asset.category ?? "-"}</td>
-                      <td>{asset.status ?? "-"}</td>
-                      <td>{asset.availability ?? "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Asset</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Availability</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {assignedAssets.map((asset) => (
+                        <tr key={asset.id}>
+                          <td>
+                            <div className="table-title">{asset.assetCode}</div>
+                            <div className="muted">{asset.make ?? ""} {asset.model ?? ""}</div>
+                          </td>
+                          <td>{asset.type ?? asset.category ?? "-"}</td>
+                          <td>{asset.status ?? "-"}</td>
+                          <td>{asset.availability ?? "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {assignedAssets.map((asset) => (
+                  <article key={`asset-mobile-${asset.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{asset.assetCode}</p>
+                        <p className="mobile-card-subtitle">{asset.make ?? ""} {asset.model ?? ""}</p>
+                      </div>
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Type</span>
+                        <span className="mobile-value">{asset.type ?? asset.category ?? "-"}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Status</span>
+                        <span className="mobile-value">{asset.status ?? "-"}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Availability</span>
+                        <span className="mobile-value">{asset.availability ?? "-"}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
       </div>
@@ -430,48 +498,91 @@ export default function SiteManagerProjectDetailPage() {
           ) : (milestonesQuery.data ?? []).length === 0 ? (
             <EmptyState title="No milestones" description="Milestones will show once added." />
           ) : (
-            <Table>
-              <TableRoot>
-                <thead>
-                  <tr>
-                    <th>Milestone</th>
-                    <th>Target Date</th>
-                    <th>Actual Date</th>
-                    <th>Status</th>
-                    <th>Progress</th>
-                    {canManage ? <th className="actions-cell">Actions</th> : null}
-                  </tr>
-                </thead>
-                <tbody>
-                  {(milestonesQuery.data ?? []).map((milestone) => (
-                    <tr key={milestone.id}>
-                      <td>
-                        <div className="table-title">{milestone.name}</div>
-                        <div className="muted">{milestone.description ?? "-"}</div>
-                      </td>
-                      <td>{formatDate(milestone.targetDate)}</td>
-                      <td>{formatDate(milestone.actualDate)}</td>
-                      <td>
-                        <Badge label={milestone.status} tone={milestoneTone(milestone.status)} />
-                      </td>
-                      <td>{milestone.progressPercent ?? 0}%</td>
-                      {canManage ? (
-                        <td className="actions-cell">
-                          <div className="row-actions">
-                            <Button variant="ghost" onClick={() => openEditMilestone(milestone)}>
-                              Edit
-                            </Button>
-                            <Button variant="ghost" onClick={() => setMilestoneDeleteTarget(milestone)}>
-                              Delete
-                            </Button>
-                          </div>
-                        </td>
-                      ) : null}
-                    </tr>
-                  ))}
-                </tbody>
-              </TableRoot>
-            </Table>
+            <>
+              <div className="desktop-table">
+                <Table>
+                  <TableRoot>
+                    <thead>
+                      <tr>
+                        <th>Milestone</th>
+                        <th>Target Date</th>
+                        <th>Actual Date</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        {canManage ? <th className="actions-cell">Actions</th> : null}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(milestonesQuery.data ?? []).map((milestone) => (
+                        <tr key={milestone.id}>
+                          <td>
+                            <div className="table-title">{milestone.name}</div>
+                            <div className="muted">{milestone.description ?? "-"}</div>
+                          </td>
+                          <td>{formatDate(milestone.targetDate)}</td>
+                          <td>{formatDate(milestone.actualDate)}</td>
+                          <td>
+                            <Badge label={milestone.status} tone={milestoneTone(milestone.status)} />
+                          </td>
+                          <td>{milestone.progressPercent ?? 0}%</td>
+                          {canManage ? (
+                            <td className="actions-cell">
+                              <div className="row-actions">
+                                <Button variant="ghost" onClick={() => openEditMilestone(milestone)}>
+                                  Edit
+                                </Button>
+                                <Button variant="ghost" onClick={() => setMilestoneDeleteTarget(milestone)}>
+                                  Delete
+                                </Button>
+                              </div>
+                            </td>
+                          ) : null}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableRoot>
+                </Table>
+              </div>
+              <div className="mobile-list">
+                {(milestonesQuery.data ?? []).map((milestone) => (
+                  <article key={`milestone-mobile-${milestone.id}`} className="mobile-card">
+                    <div className="mobile-card-head">
+                      <div>
+                        <p className="mobile-card-title">{milestone.name}</p>
+                        <p className="mobile-card-subtitle">{milestone.description ?? "-"}</p>
+                      </div>
+                      <Badge label={milestone.status} tone={milestoneTone(milestone.status)} />
+                    </div>
+                    <div className="mobile-card-grid">
+                      <div className="mobile-field">
+                        <span className="mobile-label">Target Date</span>
+                        <span className="mobile-value">{formatDate(milestone.targetDate)}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Actual Date</span>
+                        <span className="mobile-value">{formatDate(milestone.actualDate)}</span>
+                      </div>
+                      <div className="mobile-field">
+                        <span className="mobile-label">Progress</span>
+                        <span className="mobile-value">{milestone.progressPercent ?? 0}%</span>
+                      </div>
+                    </div>
+                    {canManage ? (
+                      <div className="mobile-card-actions">
+                        <div className="row-actions">
+                          <Button variant="ghost" onClick={() => openEditMilestone(milestone)}>
+                            Edit
+                          </Button>
+                          <Button variant="ghost" onClick={() => setMilestoneDeleteTarget(milestone)}>
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </SectionCard>
 

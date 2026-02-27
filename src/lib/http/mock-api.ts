@@ -72,7 +72,7 @@ const decorateBudgetLineItem = (item: Record<string, unknown>) => {
 
 const decorateBudgetSummary = (budgetId: string) => {
   const items = (db.budgetLineItems as Record<string, unknown>[]).filter((item) => item.budgetId === budgetId);
-  const totals = items.reduce(
+  const totals = items.reduce<{ allocated: number; committed: number; spent: number }>(
     (acc, item) => {
       acc.allocated += toNumber(item.allocatedAmount) ?? 0;
       acc.committed += toNumber(item.committedAmount) ?? 0;
@@ -509,7 +509,12 @@ export async function mockRequest<T>(input: string, init: RequestInit = {}) {
     : handleOperations(method, parts, url, init);
 
   if (response.status >= 400) {
-    throw new ApiError(response.message ?? "Mock API error", response.status, response);
+    const message = "message" in response ? response.message : "Mock API error";
+    throw new ApiError(message, response.status, response);
+  }
+
+  if (!("data" in response)) {
+    throw new ApiError("Mock API error", 500, response);
   }
 
   return response.data as T;

@@ -153,87 +153,149 @@ export default function SiteManagerTimesheetsPage() {
         ) : filteredTimesheets.length === 0 ? (
           <EmptyState title="No timesheets found" description="Timesheets will appear when workers clock in." />
         ) : (
-          <Table>
-            <TableRoot ref={tableRef}>
-              <thead>
-                <tr>
-                  <th>Staff</th>
-                  <th>Project</th>
-                  <th>Date</th>
-                  <th>Clock In</th>
-                  <th>Clock Out</th>
-                  <th>Auto Clockout</th>
-                  <th>Status</th>
-                  <th className="actions-cell">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredTimesheets.map((sheet, index) => (
-                  <tr
-                    key={sheet.id}
-                    {...getRowProps(index, {
-                      onEnter: () => {
-                        if (sheet.id) router.push(`/operations/site-manager/timesheets/${sheet.id}`);
-                      },
-                      disabled: !sheet.id
-                    })}
-                  >
-                    <td>
-                      <div className="table-title">
+            <>
+            <div className="desktop-table">
+              <Table>
+                <TableRoot ref={tableRef}>
+                  <thead>
+                    <tr>
+                      <th>Staff</th>
+                      <th>Project</th>
+                      <th>Date</th>
+                      <th>Clock In</th>
+                      <th>Clock Out</th>
+                      <th>Auto Clockout</th>
+                      <th>Status</th>
+                      <th className="actions-cell">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredTimesheets.map((sheet, index) => (
+                      <tr
+                        key={sheet.id}
+                        {...getRowProps(index, {
+                          onEnter: () => {
+                            if (sheet.id) router.push(`/operations/site-manager/timesheets/${sheet.id}`);
+                          },
+                          disabled: !sheet.id
+                        })}
+                      >
+                        <td>
+                          <div className="table-title">
+                            <HighlightText text={sheet.staffName ?? sheet.staffId ?? "-"} query={query} />
+                          </div>
+                          <div className="muted">
+                            <HighlightText text={sheet.staffId} query={query} />
+                          </div>
+                        </td>
+                        <td>
+                          <div className="table-title">
+                            <HighlightText text={sheet.projectName ?? sheet.projectId ?? "-"} query={query} />
+                          </div>
+                          <div className="muted">
+                            <HighlightText text={sheet.projectId} query={query} />
+                          </div>
+                        </td>
+                        <td>{formatDate(sheet.date)}</td>
+                        <td>{formatDateTime(sheet.clockInTime)}</td>
+                        <td>{sheet.clockOutTime ? formatDateTime(sheet.clockOutTime) : "-"}</td>
+                        <td>
+                          <div className="table-title">
+                            {sheet.extendedUntil ? formatDateTime(sheet.extendedUntil) : formatDateTime(sheet.autoClockoutTime)}
+                          </div>
+                          <div className="muted">{sheet.extendedUntil ? "Extended" : "Default"}</div>
+                        </td>
+                        <td>
+                          <Badge label={sheet.status ?? "PENDING"} tone={getStatusTone(sheet.status)} />
+                        </td>
+                        <td className="actions-cell">
+                          <div className="row-actions">
+                            <Button
+                              variant="ghost"
+                              onClick={() => sheet.id && router.push(`/operations/site-manager/timesheets/${sheet.id}`)}
+                            >
+                              View -&gt;
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              onClick={() => handleApprove(sheet)}
+                              disabled={sheet.status === "APPROVED"}
+                            >
+                              Approve
+                            </Button>
+                            <Button variant="ghost" onClick={() => { setRejecting(sheet); setRejectReason(""); }}>
+                              Reject
+                            </Button>
+                            <Button variant="ghost" onClick={() => { setExtending(sheet); setExtendUntil(sheet.extendedUntil ?? ""); }}>
+                              Extend
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </TableRoot>
+              </Table>
+            </div>
+            <div className="mobile-list">
+              {filteredTimesheets.map((sheet) => (
+                <article key={`timesheet-mobile-${sheet.id ?? `${sheet.staffId}-${sheet.date}`}`} className="mobile-card">
+                  <div className="mobile-card-head">
+                    <div>
+                      <p className="mobile-card-title">
                         <HighlightText text={sheet.staffName ?? sheet.staffId ?? "-"} query={query} />
-                      </div>
-                      <div className="muted">
-                        <HighlightText text={sheet.staffId} query={query} />
-                      </div>
-                    </td>
-                    <td>
-                      <div className="table-title">
+                      </p>
+                      <p className="mobile-card-subtitle">
                         <HighlightText text={sheet.projectName ?? sheet.projectId ?? "-"} query={query} />
-                      </div>
-                      <div className="muted">
-                        <HighlightText text={sheet.projectId} query={query} />
-                      </div>
-                    </td>
-                    <td>{formatDate(sheet.date)}</td>
-                    <td>{formatDateTime(sheet.clockInTime)}</td>
-                    <td>{sheet.clockOutTime ? formatDateTime(sheet.clockOutTime) : "-"}</td>
-                    <td>
-                      <div className="table-title">
-                        {sheet.extendedUntil ? formatDateTime(sheet.extendedUntil) : formatDateTime(sheet.autoClockoutTime)}
-                      </div>
-                      <div className="muted">{sheet.extendedUntil ? "Extended" : "Default"}</div>
-                    </td>
-                    <td>
-                      <Badge label={sheet.status ?? "PENDING"} tone={getStatusTone(sheet.status)} />
-                    </td>
-                    <td className="actions-cell">
-                      <div className="row-actions">
-                        <Button
-                          variant="ghost"
-                          onClick={() => sheet.id && router.push(`/operations/site-manager/timesheets/${sheet.id}`)}
-                        >
-                          View →
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          onClick={() => handleApprove(sheet)}
-                          disabled={sheet.status === "APPROVED"}
-                        >
-                          Approve
-                        </Button>
-                        <Button variant="ghost" onClick={() => { setRejecting(sheet); setRejectReason(""); }}>
-                          Reject
-                        </Button>
-                        <Button variant="ghost" onClick={() => { setExtending(sheet); setExtendUntil(sheet.extendedUntil ?? ""); }}>
-                          Extend
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </TableRoot>
-          </Table>
+                      </p>
+                    </div>
+                    <Badge label={sheet.status ?? "PENDING"} tone={getStatusTone(sheet.status)} />
+                  </div>
+                  <div className="mobile-card-grid">
+                    <div className="mobile-field">
+                      <span className="mobile-label">Date</span>
+                      <span className="mobile-value">{formatDate(sheet.date)}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Clock In</span>
+                      <span className="mobile-value">{formatDateTime(sheet.clockInTime)}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Clock Out</span>
+                      <span className="mobile-value">{sheet.clockOutTime ? formatDateTime(sheet.clockOutTime) : "-"}</span>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Auto Clockout</span>
+                      <span className="mobile-value">{sheet.extendedUntil ? formatDateTime(sheet.extendedUntil) : formatDateTime(sheet.autoClockoutTime)}</span>
+                    </div>
+                  </div>
+                  <div className="mobile-card-actions">
+                    <div className="row-actions">
+                      <Button
+                        variant="ghost"
+                        onClick={() => sheet.id && router.push(`/operations/site-manager/timesheets/${sheet.id}`)}
+                      >
+                        View -&gt;
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => handleApprove(sheet)}
+                        disabled={sheet.status === "APPROVED"}
+                      >
+                        Approve
+                      </Button>
+                      <Button variant="ghost" onClick={() => { setRejecting(sheet); setRejectReason(""); }}>
+                        Reject
+                      </Button>
+                      <Button variant="ghost" onClick={() => { setExtending(sheet); setExtendUntil(sheet.extendedUntil ?? ""); }}>
+                        Extend
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
         )}
       </SectionCard>
 

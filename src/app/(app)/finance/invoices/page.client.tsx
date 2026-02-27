@@ -260,8 +260,10 @@ export default function InvoicesPage() {
           action={canEdit ? <Button onClick={() => setShowForm(true)}>Create Invoice</Button> : null}
         />
       ) : (
-        <Table>
-          <TableRoot ref={tableRef}>
+        <>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot ref={tableRef}>
             <thead>
               <tr>
                 <th>Invoice #</th>
@@ -302,9 +304,40 @@ export default function InvoicesPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </TableRoot>
-        </Table>
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {displayItems.map((inv) => (
+              <article key={`mobile-${inv.id ?? inv.invoiceNumber}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">
+                      <HighlightText text={inv.invoiceNumber ?? "-"} query={highlightQuery} />
+                    </p>
+                    <p className="mobile-card-subtitle">
+                      <HighlightText text={inv.vendorId ?? "-"} query={highlightQuery} />
+                    </p>
+                  </div>
+                  <Badge label={inv.status ?? "PENDING"} tone={getStatusTone(inv.status ?? "PENDING")} />
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Amount</span>
+                    <div className="mobile-value">{formatMoney(inv.invoiceAmount)}</div>
+                  </div>
+                </div>
+                <div className="mobile-card-actions">
+                  <Button variant="ghost" onClick={() => inv.id && router.push(`/finance/invoices/${inv.id}`)}>View -&gt;</Button>
+                  {canEdit ? (
+                    <Button variant="ghost" onClick={() => { setSelected(inv); setShowConfirm(true); }}>Delete</Button>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
 
       <InvoiceForm

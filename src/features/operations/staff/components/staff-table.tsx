@@ -21,37 +21,73 @@ export function StaffTable({
   const { tableRef, getRowProps } = useTableKeyboardNavigation(items.length);
 
   return (
-    <Table>
-      <TableRoot ref={tableRef}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>National ID</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item, index) => (
-            <tr key={item.id ?? item.nationalId} {...getRowProps(index, { onEnter: () => onView(item) })}>
-              <td>{item.fullName}</td>
-              <td>{item.nationalId}</td>
-              <td>{item.role}</td>
-              <td>
-                <div className="row-actions">
-                  <Button variant="ghost" onClick={() => onView(item)}>View →</Button>
-                  {canEdit ? (
-                    <>
-                      <Button variant="ghost" onClick={() => onEdit(item)}>Edit</Button>
-                      <Button variant="ghost" onClick={() => onDelete(item)}>Delete</Button>
-                    </>
-                  ) : null}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </TableRoot>
-    </Table>
+    <>
+      <div className="desktop-table">
+        <Table>
+          <TableRoot ref={tableRef}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>National ID</th>
+                <th>Role</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={item.id ?? item.nationalId} {...getRowProps(index, { onEnter: () => onView(item) })}>
+                  <td>{item.fullName}</td>
+                  <td>{item.nationalId}</td>
+                  <td>{item.role}</td>
+                  <td>
+                    <div className="row-actions">
+                      <Button variant="ghost" onClick={() => onView(item)}>View -&gt;</Button>
+                      {canEdit ? (
+                        <>
+                          <Button variant="ghost" onClick={() => onEdit(item)}>Edit</Button>
+                          <Button variant="ghost" onClick={() => onDelete(item)}>Delete</Button>
+                        </>
+                      ) : null}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </TableRoot>
+        </Table>
+      </div>
+
+      <div className="mobile-list">
+        {items.map((item) => (
+          <article key={`mobile-${item.id ?? item.nationalId}`} className="mobile-card">
+            <div className="mobile-card-head">
+              <div>
+                <p className="mobile-card-title">{item.fullName}</p>
+                <p className="mobile-card-subtitle">{item.role}</p>
+              </div>
+            </div>
+            <div className="mobile-card-grid">
+              <div className="mobile-field">
+                <span className="mobile-label">National ID</span>
+                <div className="mobile-value">{item.nationalId}</div>
+              </div>
+              <div className="mobile-field">
+                <span className="mobile-label">Role</span>
+                <div className="mobile-value">{item.role}</div>
+              </div>
+            </div>
+            <div className="mobile-card-actions">
+              <Button variant="ghost" onClick={() => onView(item)}>View -&gt;</Button>
+              {canEdit ? (
+                <>
+                  <Button variant="ghost" onClick={() => onEdit(item)}>Edit</Button>
+                  <Button variant="ghost" onClick={() => onDelete(item)}>Delete</Button>
+                </>
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
   );
 }

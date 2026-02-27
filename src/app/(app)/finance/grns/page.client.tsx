@@ -262,8 +262,10 @@ export default function GRNsPage() {
       ) : displayItems.length === 0 ? (
         <EmptyState title="No GRNs" description="Create a GRN to get started." />
       ) : (
-        <Table>
-          <TableRoot ref={tableRef}>
+        <>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot ref={tableRef}>
             <thead>
               <tr>
                 <th>GRN Number</th>
@@ -304,9 +306,45 @@ export default function GRNsPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </TableRoot>
-        </Table>
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {displayItems.map((grn) => (
+              <article key={`mobile-${grn.id ?? grn.grnNumber}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">
+                      <HighlightText text={grn.grnNumber ?? "-"} query={highlightQuery} />
+                    </p>
+                    <p className="mobile-card-subtitle">
+                      <HighlightText text={grn.purchaseOrderId ?? "-"} query={highlightQuery} />
+                    </p>
+                  </div>
+                </div>
+                <div className="mobile-card-grid">
+                  <div className="mobile-field">
+                    <span className="mobile-label">Received Date</span>
+                    <div className="mobile-value">{formatDate(grn.receivedDate)}</div>
+                  </div>
+                  <div className="mobile-field">
+                    <span className="mobile-label">Received By</span>
+                    <div className="mobile-value">
+                      <HighlightText text={grn.receivedBy ?? "-"} query={highlightQuery} />
+                    </div>
+                  </div>
+                </div>
+                <div className="mobile-card-actions">
+                  <Button variant="ghost" onClick={() => grn.id && router.push(`/finance/grns/${grn.id}`)}>View -&gt;</Button>
+                  {canEdit ? (
+                    <Button variant="ghost" onClick={() => { setSelected(grn); setShowConfirm(true); }}>Delete</Button>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
 
       <GRNForm

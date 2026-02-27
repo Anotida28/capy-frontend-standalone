@@ -85,61 +85,109 @@ export default function SiteManagerProjectsPage() {
         ) : filteredProjects.length === 0 ? (
           <EmptyState title="No assigned projects" description="Projects will appear here once assigned." />
         ) : (
-          <Table>
-            <TableRoot ref={tableRef}>
-              <thead>
-                <tr>
-                  <th>Project</th>
-                  <th>Status</th>
-                  <th>Timeline</th>
-                  <th>Staff</th>
-                  <th>Equipment</th>
-                  <th className="actions-cell">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProjects.map((project, index) => (
-                  <tr
-                    key={project.id}
-                    {...getRowProps(index, {
-                      onEnter: () => {
-                        if (project.id) router.push(`/operations/site-manager/projects/${project.id}`);
-                      },
-                      disabled: !project.id
-                    })}
-                  >
-                    <td>
-                      <div className="table-title">
+          <>
+            <div className="desktop-table">
+              <Table>
+                <TableRoot ref={tableRef}>
+                  <thead>
+                    <tr>
+                      <th>Project</th>
+                      <th>Status</th>
+                      <th>Timeline</th>
+                      <th>Staff</th>
+                      <th>Equipment</th>
+                      <th className="actions-cell">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProjects.map((project, index) => (
+                      <tr
+                        key={project.id}
+                        {...getRowProps(index, {
+                          onEnter: () => {
+                            if (project.id) router.push(`/operations/site-manager/projects/${project.id}`);
+                          },
+                          disabled: !project.id
+                        })}
+                      >
+                        <td>
+                          <div className="table-title">
+                            <HighlightText text={project.name} query={query} />
+                          </div>
+                          <div className="muted">
+                            <HighlightText text={project.locationName ?? project.projectCode ?? "-"} query={query} />
+                          </div>
+                        </td>
+                        <td>
+                          <Badge label={project.status} tone={getStatusTone(project.status)} />
+                        </td>
+                        <td>
+                          <div className="table-title">{formatDate(project.startDate)}</div>
+                          <div className="muted">End {formatDate(project.endDate)}</div>
+                        </td>
+                        <td>{staffCountByProject.get(project.id ?? "") ?? 0}</td>
+                        <td>{assetCountByProject.get(project.id ?? "") ?? 0}</td>
+                        <td className="actions-cell">
+                          <div className="row-actions">
+                            <Button
+                              variant="ghost"
+                              onClick={() => project.id && router.push(`/operations/site-manager/projects/${project.id}`)}
+                            >
+                              View -&gt;
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </TableRoot>
+              </Table>
+            </div>
+
+            <div className="mobile-list">
+              {filteredProjects.map((project) => (
+                <article key={`mobile-${project.id ?? project.name}`} className="mobile-card">
+                  <div className="mobile-card-head">
+                    <div>
+                      <p className="mobile-card-title">
                         <HighlightText text={project.name} query={query} />
-                      </div>
-                      <div className="muted">
+                      </p>
+                      <p className="mobile-card-subtitle">
                         <HighlightText text={project.locationName ?? project.projectCode ?? "-"} query={query} />
+                      </p>
+                    </div>
+                    <Badge label={project.status} tone={getStatusTone(project.status)} />
+                  </div>
+
+                  <div className="mobile-card-grid">
+                    <div className="mobile-field">
+                      <span className="mobile-label">Timeline</span>
+                      <div className="mobile-value">
+                        {formatDate(project.startDate)} - {formatDate(project.endDate)}
                       </div>
-                    </td>
-                    <td>
-                      <Badge label={project.status} tone={getStatusTone(project.status)} />
-                    </td>
-                    <td>
-                      <div className="table-title">{formatDate(project.startDate)}</div>
-                      <div className="muted">End {formatDate(project.endDate)}</div>
-                    </td>
-                    <td>{staffCountByProject.get(project.id ?? "") ?? 0}</td>
-                    <td>{assetCountByProject.get(project.id ?? "") ?? 0}</td>
-                    <td className="actions-cell">
-                      <div className="row-actions">
-                        <Button
-                          variant="ghost"
-                          onClick={() => project.id && router.push(`/operations/site-manager/projects/${project.id}`)}
-                        >
-                          View →
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </TableRoot>
-          </Table>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Staff</span>
+                      <div className="mobile-value">{staffCountByProject.get(project.id ?? "") ?? 0}</div>
+                    </div>
+                    <div className="mobile-field">
+                      <span className="mobile-label">Equipment</span>
+                      <div className="mobile-value">{assetCountByProject.get(project.id ?? "") ?? 0}</div>
+                    </div>
+                  </div>
+
+                  <div className="mobile-card-actions">
+                    <Button
+                      variant="ghost"
+                      onClick={() => project.id && router.push(`/operations/site-manager/projects/${project.id}`)}
+                    >
+                      View -&gt;
+                    </Button>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </>
         )}
       </SectionCard>
     </PageShell>

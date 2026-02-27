@@ -99,6 +99,7 @@ export default function AssetDetailPage() {
   });
 
   const asset = assetQuery.data;
+  const assetId = asset?.id ?? id;
 
   const availabilityTone = (availability?: Asset["availability"] | null) => {
     if (!availability) return "pending";
@@ -169,7 +170,7 @@ export default function AssetDetailPage() {
       condition: asset.condition ?? ""
     });
     setLocationValue(asset.currentLocationWkt ?? "");
-    setMediaValues((prev) => ({ ...prev, assetId: asset.id }));
+    setMediaValues((prev) => ({ ...prev, assetId: asset.id ?? prev.assetId }));
   }, [asset]);
 
   if (assetQuery.isLoading) return <Skeleton className="surface-card" />;
@@ -412,7 +413,7 @@ export default function AssetDetailPage() {
                       <td className="actions-cell">
                         <Button
                           variant="ghost"
-                          onClick={() => media.id && deleteMedia.mutate({ id: media.id, assetId: asset.id })}
+                          onClick={() => media.id && deleteMedia.mutate({ id: media.id, assetId })}
                         >
                           Delete
                         </Button>
@@ -689,10 +690,10 @@ export default function AssetDetailPage() {
             onClick={async () => {
               if (!mediaValues.mediaUrl) return;
               try {
-                await createMedia.mutateAsync({ ...mediaValues, assetId: asset.id });
+                await createMedia.mutateAsync({ ...mediaValues, assetId });
                 notify({ message: "Media added", tone: "success" });
                 setShowMedia(false);
-                setMediaValues({ assetId: asset.id, mediaUrl: "", mediaType: "PHOTO", description: "", capturedAt: "" });
+                setMediaValues({ assetId, mediaUrl: "", mediaType: "PHOTO", description: "", capturedAt: "" });
               } catch {
                 notify({ message: "Unable to add media", tone: "error" });
               }

@@ -164,8 +164,10 @@ export default function BudgetsPage() {
       ) : items.length === 0 ? (
         <EmptyState title="No budgets" description="Create a budget to get started." />
       ) : (
-        <Table>
-          <TableRoot ref={tableRef}>
+        <>
+          <div className="desktop-table">
+            <Table>
+              <TableRoot ref={tableRef}>
             <thead>
               <tr>
                 <th>Project</th>
@@ -209,9 +211,39 @@ export default function BudgetsPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </TableRoot>
-        </Table>
+                </tbody>
+              </TableRoot>
+            </Table>
+          </div>
+          <div className="mobile-list">
+            {items.map((budget) => (
+              <article key={`mobile-${budget.id ?? budget.projectId}`} className="mobile-card">
+                <div className="mobile-card-head">
+                  <div>
+                    <p className="mobile-card-title">
+                      <HighlightText text={budget.projectId ?? "-"} query={highlightQuery} />
+                    </p>
+                    <p className="mobile-card-subtitle">{formatMoney(budget.totalValue)}</p>
+                  </div>
+                  <Badge label={budget.status ?? "DRAFT"} tone={getStatusTone(budget.status ?? "DRAFT")} />
+                </div>
+                <div className="mobile-card-actions">
+                  <Button variant="ghost" onClick={() => router.push(`/finance/budgets/${budget.id}`)}>View -&gt;</Button>
+                  {canEdit ? (
+                    <RowActions
+                      actions={[
+                        { label: "Lock", onClick: () => actions.lock.mutate(budget.id!) },
+                        { label: "Unlock", onClick: () => actions.unlock.mutate(budget.id!) },
+                        { label: "Close", onClick: () => actions.close.mutate(budget.id!) },
+                        { label: "Delete", onClick: () => { setSelected(budget); setShowConfirm(true); }, tone: "destructive" }
+                      ]}
+                    />
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
       )}
 
       <BudgetForm
