@@ -8,4 +8,8 @@ yarn-error.log*
 
 # OS
 .DS_Store
-node_modules/
+
+# Environment
+.env*
+!.env.example
+!capy-backend-json/.env.example

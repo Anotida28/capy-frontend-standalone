@@ -2,27 +2,31 @@
 
 This folder is a standalone copy of the frontend app.
 
-## Run locally
+## Local setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-The app includes `.env.local` with:
+Create a local `.env.local` (do not commit it) from `.env.example`.
+
+```env
+NEXT_PUBLIC_USE_MOCK_API=false
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+```
+
+If you want frontend-only mock mode:
 
 ```env
 NEXT_PUBLIC_USE_MOCK_API=true
 ```
 
-That means it runs against local mock data by default and does not require the backend server.
+## Railway
 
-## Optional: connect to backend
-
-Set either:
+Set frontend variables in Railway:
 
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+NEXT_PUBLIC_USE_MOCK_API=false
+NEXT_PUBLIC_API_BASE_URL=https://<your-backend-service>.up.railway.app
 ```
-
-or leave it empty and use the `next.config.js` rewrite to `/api/v1`.
